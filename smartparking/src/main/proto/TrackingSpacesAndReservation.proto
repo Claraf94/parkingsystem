@@ -1,7 +1,8 @@
 syntax = "proto3";
 option java_multiple_files = true;
-option java_package = "generated.grpc.smartparking";
-option java_outer_classname = "VehicleEntryExitServiceImpl";
+option java_package = "grpc.generated.TrackingSpacesAndReservation";
+option java_outer_classname = "TrackingSpacesAndReservationImpl";
+import "google/protobuf/empty.proto";
 
 //Package for all the services to be implemented
 package smartparking;
@@ -9,7 +10,7 @@ package smartparking;
 //This service will monitor the available spots for parking and allow reservation
 service TrackingSpacesAndReservationService{
     //Provides continuos information about available spots - Server Streaming
-    rpc TrackingSpots (Empty) returns (stream SpotsAvailability){}// Empty is used because the client does not need to send any request to receive a reply
+    rpc TrackingSpots (google.protobuf.Empty) returns (stream SpotsAvailability){}// Empty is used because the client does not need to send any request to receive a reply
 
     //Provides data about reservation - bi-directional streaming
     rpc Reservation (stream ReservationRequest) returns (stream ReservationReply){}
