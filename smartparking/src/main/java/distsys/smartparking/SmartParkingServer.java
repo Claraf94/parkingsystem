@@ -49,7 +49,7 @@ public class SmartParkingServer extends VehicleEntryExitServiceImplBase{
 
         System.out.println("Receiving vehicle entry/exit request");
         
-        ClientReply reply = ClientReply.newBuilder().setMessage("Vehicle number plate: " + request.getNumberPlate() + "Operation: " + request.getOperation()).setConfirmation(true).build();
+        ClientReply reply = ClientReply.newBuilder().setMessage("Vehicle number plate: " + request.getNumberPlate() + ".\nOperation: " + request.getOperation()).setConfirmation(true).build();
 
         responseObserver.onNext(reply);
 

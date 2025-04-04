@@ -10,11 +10,14 @@ import java.util.logging.Logger;
 import grpc.generated.VehicleEntry.ClientRequest;
 import grpc.generated.VehicleEntry.ClientReply;
 import grpc.generated.VehicleEntry.VehicleEntryExitServiceGrpc;
+import grpc.generated.VehicleEntry.VehicleEntryExitServiceGrpc.VehicleEntryExitServiceBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import java.util.logging.Level;
 
 
 public class SmartParkingClient {
@@ -29,6 +32,32 @@ public class SmartParkingClient {
                 forAddress(host, port)
                 .usePlaintext()
                 .build();
-         blockingStub = GreeterGrpc.newBlockingStub(channel);
+         blockingStub = VehicleEntryExitServiceGrpc.newBlockingStub(channel);
+    }
+    
+    
+
+    public static void main(String[]args)throws Exception{
+        SmartParkingClient smartParking = new SmartParkingClient();
+                try {
+                    //testing for both entry and exit
+                    ClientReply vehicleEntryResponse = smartParking.clientHelperVehicleEntryExit("012-D-34567", "Entry");
+                    logger.info("\n" + vehicleEntryResponse.getMessage());
+
+                    ClientReply vehicleExitResponse = smartParking.clientHelperVehicleEntryExit("012-D-34567", "Exit");
+                    logger.info("\n" + vehicleExitResponse.getMessage());
+                } catch (StatusRuntimeException e) {
+                    logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+                    return;
+                }
+    }
+
+    public ClientReply clientHelperVehicleEntryExit(String numberPlate, String operation) {
+        ClientRequest request = ClientRequest.newBuilder()
+                    .setNumberPlate(numberPlate)
+                    .setOperation(operation)
+                    .build();
+        ClientReply response = blockingStub.performingVehicleEntryExit(request);
+        return response;
     }
 }
