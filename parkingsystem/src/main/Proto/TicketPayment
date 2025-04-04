@@ -1,0 +1,27 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "generated.grpc.smartparking";
+option java_outer_classname = "TicketPaymentServiceImpl";
+
+//Package for all the services to be implemented
+package smartparking;
+
+//This service will process the ticket payment - Client Streaming
+service TicketPaymentService{
+    rpc ProcessPayment(stream ClientRequest) returns (ClientReply){}
+}
+
+//Request message for making payment
+message ClientRequest{
+    string paymentType = 1; //Card, cash, voucher
+    double amount = 2;
+    string paymentID = 3;
+}
+
+//Reply message for making payment
+message ClientReply{
+    bool confirmation = 2; //Confirmation about the status of the payment
+    string receiptID = 3; 
+}
+
+

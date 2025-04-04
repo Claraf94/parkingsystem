@@ -1,0 +1,26 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "generated.grpc.parkingsystem";
+option java_outer_classname = "VehicleEntryExitServiceImpl";
+
+//Package for all the services to be implemented
+package smartparking;
+
+//this service will monitor vehicles entry and exit – Unary service
+service VehicleEntryExitService{
+    //Processing entry and exit
+    rpc PerformingVehicleEntryExit(ClientRequest) returns (ClientReply){}
+}
+
+//Request message for vehicle entry/exit
+message ClientRequest{
+    string numberPlate = 1;
+    string operation = 2; //here we have two possible operations: entry and exit
+}
+
+//Reply message for vehicle entry/exit
+message ClientReply{
+    string message = 1; //Any message that will be returned saying if the operation was successful or not
+    bool confirmation = 2; //Gives the system the information about the ticket if it was paid or not
+}
+
