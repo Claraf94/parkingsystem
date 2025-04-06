@@ -7,10 +7,10 @@ package distsys.smartparking;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import grpc.generated.VehicleEntry.ClientRequest;
-import grpc.generated.VehicleEntry.ClientReply;
-import grpc.generated.VehicleEntry.VehicleEntryExitServiceGrpc;
-import grpc.generated.VehicleEntry.VehicleEntryExitServiceGrpc.VehicleEntryExitServiceBlockingStub;
+import grpc.generated.VehicleEntryExit.ClientRequest;
+import grpc.generated.VehicleEntryExit.ClientReply;
+import grpc.generated.VehicleEntryExit.VehicleEntryExitServiceGrpc;
+import grpc.generated.VehicleEntryExit.VehicleEntryExitServiceGrpc.VehicleEntryExitServiceBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
@@ -20,12 +20,12 @@ import io.grpc.stub.StreamObserver;
 import java.util.logging.Level;
 
 
-public class SmartParkingClient {
-    private static final Logger logger = Logger.getLogger(SmartParkingServer.class.getName());
+public class SmartParkingEntryExit {
+        private static final Logger logger = Logger.getLogger(SmartParkingEntryExit.class.getName());
     VehicleEntryExitServiceBlockingStub blockingStub;
     ManagedChannel channel;
    
-    public SmartParkingClient (){
+    public SmartParkingEntryExit (){
         String host = "localhost";
         int port = 50051;
         channel = ManagedChannelBuilder.
@@ -38,14 +38,15 @@ public class SmartParkingClient {
     
 
     public static void main(String[]args)throws Exception{
-        SmartParkingClient smartParking = new SmartParkingClient();
+        SmartParkingEntryExit smartParking = new SmartParkingEntryExit();
                 try {
                     //testing for both entry and exit
                     ClientReply vehicleEntryResponse = smartParking.clientHelperVehicleEntryExit("012-D-34567", "Entry");
-                    logger.info("\n" + vehicleEntryResponse.getMessage());
+                    logger.info("Entry details: " + vehicleEntryResponse.getMessage());
 
                     ClientReply vehicleExitResponse = smartParking.clientHelperVehicleEntryExit("012-D-34567", "Exit");
-                    logger.info("\n" + vehicleExitResponse.getMessage());
+                    logger.info("Exit details: " + vehicleExitResponse.getMessage());
+                    logger.info("Payment details: " + vehicleExitResponse.getConfirmation());
                 } catch (StatusRuntimeException e) {
                     logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
                     return;

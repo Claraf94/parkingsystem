@@ -1,6 +1,6 @@
 syntax = "proto3";
 option java_multiple_files = true;
-option java_package = "grpc.generated.VehicleEntry";
+option java_package = "grpc.generated.VehicleEntryExit";
 option java_outer_classname = "VehicleEntryExitImpl";
 
 //Package for all the services to be implemented

@@ -1,4 +1,4 @@
-package grpc.generated.VehicleEntry;
+package grpc.generated.VehicleEntryExit;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
@@ -30,30 +30,30 @@ public final class VehicleEntryExitServiceGrpc {
   public static final String SERVICE_NAME = "smartparking.VehicleEntryExitService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<grpc.generated.VehicleEntry.ClientRequest,
-      grpc.generated.VehicleEntry.ClientReply> getPerformingVehicleEntryExitMethod;
+  private static volatile io.grpc.MethodDescriptor<grpc.generated.VehicleEntryExit.ClientRequest,
+      grpc.generated.VehicleEntryExit.ClientReply> getPerformingVehicleEntryExitMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "PerformingVehicleEntryExit",
-      requestType = grpc.generated.VehicleEntry.ClientRequest.class,
-      responseType = grpc.generated.VehicleEntry.ClientReply.class,
+      requestType = grpc.generated.VehicleEntryExit.ClientRequest.class,
+      responseType = grpc.generated.VehicleEntryExit.ClientReply.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<grpc.generated.VehicleEntry.ClientRequest,
-      grpc.generated.VehicleEntry.ClientReply> getPerformingVehicleEntryExitMethod() {
-    io.grpc.MethodDescriptor<grpc.generated.VehicleEntry.ClientRequest, grpc.generated.VehicleEntry.ClientReply> getPerformingVehicleEntryExitMethod;
+  public static io.grpc.MethodDescriptor<grpc.generated.VehicleEntryExit.ClientRequest,
+      grpc.generated.VehicleEntryExit.ClientReply> getPerformingVehicleEntryExitMethod() {
+    io.grpc.MethodDescriptor<grpc.generated.VehicleEntryExit.ClientRequest, grpc.generated.VehicleEntryExit.ClientReply> getPerformingVehicleEntryExitMethod;
     if ((getPerformingVehicleEntryExitMethod = VehicleEntryExitServiceGrpc.getPerformingVehicleEntryExitMethod) == null) {
       synchronized (VehicleEntryExitServiceGrpc.class) {
         if ((getPerformingVehicleEntryExitMethod = VehicleEntryExitServiceGrpc.getPerformingVehicleEntryExitMethod) == null) {
           VehicleEntryExitServiceGrpc.getPerformingVehicleEntryExitMethod = getPerformingVehicleEntryExitMethod = 
-              io.grpc.MethodDescriptor.<grpc.generated.VehicleEntry.ClientRequest, grpc.generated.VehicleEntry.ClientReply>newBuilder()
+              io.grpc.MethodDescriptor.<grpc.generated.VehicleEntryExit.ClientRequest, grpc.generated.VehicleEntryExit.ClientReply>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "smartparking.VehicleEntryExitService", "PerformingVehicleEntryExit"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  grpc.generated.VehicleEntry.ClientRequest.getDefaultInstance()))
+                  grpc.generated.VehicleEntryExit.ClientRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  grpc.generated.VehicleEntry.ClientReply.getDefaultInstance()))
+                  grpc.generated.VehicleEntryExit.ClientReply.getDefaultInstance()))
                   .setSchemaDescriptor(new VehicleEntryExitServiceMethodDescriptorSupplier("PerformingVehicleEntryExit"))
                   .build();
           }
@@ -97,8 +97,8 @@ public final class VehicleEntryExitServiceGrpc {
      *Processing entry and exit
      * </pre>
      */
-    public void performingVehicleEntryExit(grpc.generated.VehicleEntry.ClientRequest request,
-        io.grpc.stub.StreamObserver<grpc.generated.VehicleEntry.ClientReply> responseObserver) {
+    public void performingVehicleEntryExit(grpc.generated.VehicleEntryExit.ClientRequest request,
+        io.grpc.stub.StreamObserver<grpc.generated.VehicleEntryExit.ClientReply> responseObserver) {
       asyncUnimplementedUnaryCall(getPerformingVehicleEntryExitMethod(), responseObserver);
     }
 
@@ -108,8 +108,8 @@ public final class VehicleEntryExitServiceGrpc {
             getPerformingVehicleEntryExitMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                grpc.generated.VehicleEntry.ClientRequest,
-                grpc.generated.VehicleEntry.ClientReply>(
+                grpc.generated.VehicleEntryExit.ClientRequest,
+                grpc.generated.VehicleEntryExit.ClientReply>(
                   this, METHODID_PERFORMING_VEHICLE_ENTRY_EXIT)))
           .build();
     }
@@ -141,8 +141,8 @@ public final class VehicleEntryExitServiceGrpc {
      *Processing entry and exit
      * </pre>
      */
-    public void performingVehicleEntryExit(grpc.generated.VehicleEntry.ClientRequest request,
-        io.grpc.stub.StreamObserver<grpc.generated.VehicleEntry.ClientReply> responseObserver) {
+    public void performingVehicleEntryExit(grpc.generated.VehicleEntryExit.ClientRequest request,
+        io.grpc.stub.StreamObserver<grpc.generated.VehicleEntryExit.ClientReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getPerformingVehicleEntryExitMethod(), getCallOptions()), request, responseObserver);
     }
@@ -174,7 +174,7 @@ public final class VehicleEntryExitServiceGrpc {
      *Processing entry and exit
      * </pre>
      */
-    public grpc.generated.VehicleEntry.ClientReply performingVehicleEntryExit(grpc.generated.VehicleEntry.ClientRequest request) {
+    public grpc.generated.VehicleEntryExit.ClientReply performingVehicleEntryExit(grpc.generated.VehicleEntryExit.ClientRequest request) {
       return blockingUnaryCall(
           getChannel(), getPerformingVehicleEntryExitMethod(), getCallOptions(), request);
     }
@@ -206,8 +206,8 @@ public final class VehicleEntryExitServiceGrpc {
      *Processing entry and exit
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<grpc.generated.VehicleEntry.ClientReply> performingVehicleEntryExit(
-        grpc.generated.VehicleEntry.ClientRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<grpc.generated.VehicleEntryExit.ClientReply> performingVehicleEntryExit(
+        grpc.generated.VehicleEntryExit.ClientRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getPerformingVehicleEntryExitMethod(), getCallOptions()), request);
     }
@@ -233,8 +233,8 @@ public final class VehicleEntryExitServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_PERFORMING_VEHICLE_ENTRY_EXIT:
-          serviceImpl.performingVehicleEntryExit((grpc.generated.VehicleEntry.ClientRequest) request,
-              (io.grpc.stub.StreamObserver<grpc.generated.VehicleEntry.ClientReply>) responseObserver);
+          serviceImpl.performingVehicleEntryExit((grpc.generated.VehicleEntryExit.ClientRequest) request,
+              (io.grpc.stub.StreamObserver<grpc.generated.VehicleEntryExit.ClientReply>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -258,7 +258,7 @@ public final class VehicleEntryExitServiceGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return grpc.generated.VehicleEntry.VehicleEntryExitImpl.getDescriptor();
+      return grpc.generated.VehicleEntryExit.VehicleEntryExitImpl.getDescriptor();
     }
 
     @java.lang.Override
