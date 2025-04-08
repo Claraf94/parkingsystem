@@ -18,6 +18,7 @@ import io.grpc.ServerBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import java.util.logging.Level;
+import javax.swing.JOptionPane;
 
 
 public class SmartParkingEntryExit {
@@ -41,10 +42,12 @@ public class SmartParkingEntryExit {
         SmartParkingEntryExit smartParking = new SmartParkingEntryExit();
                 try {
                     //testing for both entry and exit
-                    ClientReply vehicleEntryResponse = smartParking.clientHelperVehicleEntryExit("012-D-34567", "Entry");
+                    String entrance =  JOptionPane.showInputDialog(null, "Insert the vehicle number plate: ");
+                    ClientReply vehicleEntryResponse = smartParking.clientHelperVehicleEntryExit(entrance.toUpperCase(), "Entry");
                     logger.info("Entry details: " + vehicleEntryResponse.getMessage());
-
-                    ClientReply vehicleExitResponse = smartParking.clientHelperVehicleEntryExit("012-D-34567", "Exit");
+                    
+                    String exit = JOptionPane.showInputDialog(null, "Insert the vehicle number plate: ");
+                    ClientReply vehicleExitResponse = smartParking.clientHelperVehicleEntryExit(exit.toUpperCase(), "Exit");
                     logger.info("Exit details: " + vehicleExitResponse.getMessage());
                     logger.info("Payment details: " + vehicleExitResponse.getConfirmation());
                 } catch (StatusRuntimeException e) {
