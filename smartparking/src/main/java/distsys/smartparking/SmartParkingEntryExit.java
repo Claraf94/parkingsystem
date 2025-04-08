@@ -58,7 +58,7 @@ public class SmartParkingEntryExit {
                     .setNumberPlate(numberPlate)
                     .setOperation(operation)
                     .build();
-        ClientReply response = blockingStub.performingVehicleEntryExit(request);
-        return response;
+        ClientReply responseObserver = blockingStub.performingVehicleEntryExit(request);
+        return responseObserver;
     }
 }

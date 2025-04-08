@@ -57,16 +57,15 @@ public class SmartParkingServer{
         public void performingVehicleEntryExit (ClientRequest request, StreamObserver<ClientReply> responseObserver) {
 
             System.out.println("Receiving vehicle entry/exit request");
-            
+            //checking if the vehicle is leaving or entrying the parking area
+            String operation = request.getOperation();
             //in case the vehicle is leaving the parking area, we need to confirm if the ticket was paid
             //for the entrance will be always true
             boolean confirmation = false;
-            //checking if the vehicle is leaving or entrying the parking area
-            String operation = request.getOperation();
-            //generating random confirmation(true or not) for the payment
+            //generating random confirmation(true or not) for the payment to confirm the exit
             boolean paidTicket = new Random().nextBoolean();
             
-            if("Entry".equals(operation)){
+            if("Entry".equalsIgnoreCase(operation)){
                 System.out.println("Vehicle entry number plate: " + request.getNumberPlate());
                 confirmation = true;
             }else{
@@ -80,7 +79,8 @@ public class SmartParkingServer{
                 }
             }
 
-            ClientReply reply = ClientReply.newBuilder().setMessage("Vehicle number plate: " + request.getNumberPlate() + ".\nOperation: " + request.getOperation()).setConfirmation(confirmation).build();
+            ClientReply reply = ClientReply.newBuilder().setMessage("Vehicle number plate: " + request.getNumberPlate() + 
+                                ".\nOperation: " + request.getOperation()).setConfirmation(confirmation).build();
 
             responseObserver.onNext(reply);
 

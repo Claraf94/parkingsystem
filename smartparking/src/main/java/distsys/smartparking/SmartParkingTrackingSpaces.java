@@ -43,8 +43,11 @@ public class SmartParkingTrackingSpaces {
             // prepare to collect multiple responses from the server
             ArrayList<Integer> emptySpotsCollection = new ArrayList<Integer>();
             
+            //empty request to the server
+            Empty request = Empty.newBuilder().build();
+            
             // prepare to receive a stream of responses from the server
-            StreamObserver<SpotsAvailability> response = new StreamObserver<SpotsAvailability> () {
+            StreamObserver<SpotsAvailability> responseObserver = new StreamObserver<SpotsAvailability> () {
                 @Override
                 public void onNext(SpotsAvailability spotsAvailability) {
                     System.out.println("Sending updates about available parking spots: " + spotsAvailability.getEmptySpots());
@@ -63,9 +66,8 @@ public class SmartParkingTrackingSpaces {
                 }
             };
             
-            Empty request = Empty.newBuilder().build();
             // send the request to the server on the nonblocking stub. Pass the StreamObserver to the server
-            stub.trackingSpots(request, response);
+            stub.trackingSpots(request, responseObserver);
         
         // print a line here to show the client continues on rather than waiting for the server response.
         System.out.println(LocalTime.now() + "Parking spots being localized");
