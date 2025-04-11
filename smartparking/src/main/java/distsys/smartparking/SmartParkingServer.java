@@ -5,6 +5,7 @@
 package distsys.smartparking;
 
 import com.google.protobuf.Empty;
+import grpc.generated.TrackingSpacesAndReservation.ReservationReply;
 import java.io.IOException;
 import java.util.logging.Logger;
 import grpc.generated.VehicleEntryExit.ClientRequest;
@@ -92,6 +93,7 @@ public class SmartParkingServer{
     *
     *This service is a service streaming and returns information about available spots to park 
     */
+    
     public static class TrackingSpacesAndReservationServiceImpl extends TrackingSpacesAndReservationServiceImplBase {
         @Override
         public void trackingSpots(Empty request, StreamObserver<SpotsAvailability> responseObserver){
@@ -100,7 +102,7 @@ public class SmartParkingServer{
 
             //generating random number of spots available for parking
             Random random = new Random();
-            int emptySpots = random.nextInt(11);
+            int emptySpots = random.nextInt(101);
 
 
             do{            
@@ -109,7 +111,7 @@ public class SmartParkingServer{
                 responseObserver.onNext(reply);
 
                 try{
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }
@@ -131,10 +133,11 @@ public class SmartParkingServer{
 
                 emptySpots = emptySpots + update;
 
-            }while(emptySpots > 0 && emptySpots <= 10);
+            }while(emptySpots > 0 && emptySpots <= 100);
 
             System.out.println("No more spots available for parking.");
             responseObserver.onCompleted();
         }
-    }       
+        
+    }
 }

@@ -21,8 +21,8 @@ private static final long serialVersionUID = 0L;
   }
   private ReservationRequest() {
     userID_ = "";
-    operation_ = "";
-    reservationDetails_ = "";
+    date_ = "";
+    time_ = "";
   }
 
   @java.lang.Override
@@ -58,13 +58,13 @@ private static final long serialVersionUID = 0L;
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            operation_ = s;
+            date_ = s;
             break;
           }
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            reservationDetails_ = s;
+            time_ = s;
             break;
           }
           default: {
@@ -133,68 +133,68 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int OPERATION_FIELD_NUMBER = 2;
-  private volatile java.lang.Object operation_;
+  public static final int DATE_FIELD_NUMBER = 2;
+  private volatile java.lang.Object date_;
   /**
-   * <code>string operation = 2;</code>
+   * <code>string date = 2;</code>
    */
-  public java.lang.String getOperation() {
-    java.lang.Object ref = operation_;
+  public java.lang.String getDate() {
+    java.lang.Object ref = date_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      operation_ = s;
+      date_ = s;
       return s;
     }
   }
   /**
-   * <code>string operation = 2;</code>
+   * <code>string date = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getOperationBytes() {
-    java.lang.Object ref = operation_;
+      getDateBytes() {
+    java.lang.Object ref = date_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      operation_ = b;
+      date_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int RESERVATIONDETAILS_FIELD_NUMBER = 3;
-  private volatile java.lang.Object reservationDetails_;
+  public static final int TIME_FIELD_NUMBER = 3;
+  private volatile java.lang.Object time_;
   /**
-   * <code>string reservationDetails = 3;</code>
+   * <code>string time = 3;</code>
    */
-  public java.lang.String getReservationDetails() {
-    java.lang.Object ref = reservationDetails_;
+  public java.lang.String getTime() {
+    java.lang.Object ref = time_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      reservationDetails_ = s;
+      time_ = s;
       return s;
     }
   }
   /**
-   * <code>string reservationDetails = 3;</code>
+   * <code>string time = 3;</code>
    */
   public com.google.protobuf.ByteString
-      getReservationDetailsBytes() {
-    java.lang.Object ref = reservationDetails_;
+      getTimeBytes() {
+    java.lang.Object ref = time_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      reservationDetails_ = b;
+      time_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -218,11 +218,11 @@ private static final long serialVersionUID = 0L;
     if (!getUserIDBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, userID_);
     }
-    if (!getOperationBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, operation_);
+    if (!getDateBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, date_);
     }
-    if (!getReservationDetailsBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, reservationDetails_);
+    if (!getTimeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, time_);
     }
     unknownFields.writeTo(output);
   }
@@ -236,11 +236,11 @@ private static final long serialVersionUID = 0L;
     if (!getUserIDBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, userID_);
     }
-    if (!getOperationBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, operation_);
+    if (!getDateBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, date_);
     }
-    if (!getReservationDetailsBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, reservationDetails_);
+    if (!getTimeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, time_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -260,10 +260,10 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && getUserID()
         .equals(other.getUserID());
-    result = result && getOperation()
-        .equals(other.getOperation());
-    result = result && getReservationDetails()
-        .equals(other.getReservationDetails());
+    result = result && getDate()
+        .equals(other.getDate());
+    result = result && getTime()
+        .equals(other.getTime());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -277,10 +277,10 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + USERID_FIELD_NUMBER;
     hash = (53 * hash) + getUserID().hashCode();
-    hash = (37 * hash) + OPERATION_FIELD_NUMBER;
-    hash = (53 * hash) + getOperation().hashCode();
-    hash = (37 * hash) + RESERVATIONDETAILS_FIELD_NUMBER;
-    hash = (53 * hash) + getReservationDetails().hashCode();
+    hash = (37 * hash) + DATE_FIELD_NUMBER;
+    hash = (53 * hash) + getDate().hashCode();
+    hash = (37 * hash) + TIME_FIELD_NUMBER;
+    hash = (53 * hash) + getTime().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -420,9 +420,9 @@ private static final long serialVersionUID = 0L;
       super.clear();
       userID_ = "";
 
-      operation_ = "";
+      date_ = "";
 
-      reservationDetails_ = "";
+      time_ = "";
 
       return this;
     }
@@ -451,8 +451,8 @@ private static final long serialVersionUID = 0L;
     public grpc.generated.TrackingSpacesAndReservation.ReservationRequest buildPartial() {
       grpc.generated.TrackingSpacesAndReservation.ReservationRequest result = new grpc.generated.TrackingSpacesAndReservation.ReservationRequest(this);
       result.userID_ = userID_;
-      result.operation_ = operation_;
-      result.reservationDetails_ = reservationDetails_;
+      result.date_ = date_;
+      result.time_ = time_;
       onBuilt();
       return result;
     }
@@ -505,12 +505,12 @@ private static final long serialVersionUID = 0L;
         userID_ = other.userID_;
         onChanged();
       }
-      if (!other.getOperation().isEmpty()) {
-        operation_ = other.operation_;
+      if (!other.getDate().isEmpty()) {
+        date_ = other.date_;
         onChanged();
       }
-      if (!other.getReservationDetails().isEmpty()) {
-        reservationDetails_ = other.reservationDetails_;
+      if (!other.getTime().isEmpty()) {
+        time_ = other.time_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -611,140 +611,140 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object operation_ = "";
+    private java.lang.Object date_ = "";
     /**
-     * <code>string operation = 2;</code>
+     * <code>string date = 2;</code>
      */
-    public java.lang.String getOperation() {
-      java.lang.Object ref = operation_;
+    public java.lang.String getDate() {
+      java.lang.Object ref = date_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        operation_ = s;
+        date_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string operation = 2;</code>
+     * <code>string date = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getOperationBytes() {
-      java.lang.Object ref = operation_;
+        getDateBytes() {
+      java.lang.Object ref = date_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        operation_ = b;
+        date_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string operation = 2;</code>
+     * <code>string date = 2;</code>
      */
-    public Builder setOperation(
+    public Builder setDate(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      operation_ = value;
+      date_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string operation = 2;</code>
+     * <code>string date = 2;</code>
      */
-    public Builder clearOperation() {
+    public Builder clearDate() {
       
-      operation_ = getDefaultInstance().getOperation();
+      date_ = getDefaultInstance().getDate();
       onChanged();
       return this;
     }
     /**
-     * <code>string operation = 2;</code>
+     * <code>string date = 2;</code>
      */
-    public Builder setOperationBytes(
+    public Builder setDateBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      operation_ = value;
+      date_ = value;
       onChanged();
       return this;
     }
 
-    private java.lang.Object reservationDetails_ = "";
+    private java.lang.Object time_ = "";
     /**
-     * <code>string reservationDetails = 3;</code>
+     * <code>string time = 3;</code>
      */
-    public java.lang.String getReservationDetails() {
-      java.lang.Object ref = reservationDetails_;
+    public java.lang.String getTime() {
+      java.lang.Object ref = time_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        reservationDetails_ = s;
+        time_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string reservationDetails = 3;</code>
+     * <code>string time = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getReservationDetailsBytes() {
-      java.lang.Object ref = reservationDetails_;
+        getTimeBytes() {
+      java.lang.Object ref = time_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        reservationDetails_ = b;
+        time_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string reservationDetails = 3;</code>
+     * <code>string time = 3;</code>
      */
-    public Builder setReservationDetails(
+    public Builder setTime(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      reservationDetails_ = value;
+      time_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string reservationDetails = 3;</code>
+     * <code>string time = 3;</code>
      */
-    public Builder clearReservationDetails() {
+    public Builder clearTime() {
       
-      reservationDetails_ = getDefaultInstance().getReservationDetails();
+      time_ = getDefaultInstance().getTime();
       onChanged();
       return this;
     }
     /**
-     * <code>string reservationDetails = 3;</code>
+     * <code>string time = 3;</code>
      */
-    public Builder setReservationDetailsBytes(
+    public Builder setTimeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      reservationDetails_ = value;
+      time_ = value;
       onChanged();
       return this;
     }

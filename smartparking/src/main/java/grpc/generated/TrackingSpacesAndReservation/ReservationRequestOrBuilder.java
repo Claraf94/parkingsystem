@@ -18,22 +18,22 @@ public interface ReservationRequestOrBuilder extends
       getUserIDBytes();
 
   /**
-   * <code>string operation = 2;</code>
+   * <code>string date = 2;</code>
    */
-  java.lang.String getOperation();
+  java.lang.String getDate();
   /**
-   * <code>string operation = 2;</code>
+   * <code>string date = 2;</code>
    */
   com.google.protobuf.ByteString
-      getOperationBytes();
+      getDateBytes();
 
   /**
-   * <code>string reservationDetails = 3;</code>
+   * <code>string time = 3;</code>
    */
-  java.lang.String getReservationDetails();
+  java.lang.String getTime();
   /**
-   * <code>string reservationDetails = 3;</code>
+   * <code>string time = 3;</code>
    */
   com.google.protobuf.ByteString
-      getReservationDetailsBytes();
+      getTimeBytes();
 }

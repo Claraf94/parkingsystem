@@ -41,18 +41,18 @@ public final class TrackingSpacesAndReservationImpl {
       "\n\"TrackingSpacesAndReservation.proto\022\014sm" +
       "artparking\032\033google/protobuf/empty.proto\"" +
       "\'\n\021SpotsAvailability\022\022\n\nemptySpots\030\001 \001(\005" +
-      "\"S\n\022ReservationRequest\022\016\n\006userID\030\001 \001(\t\022\021" +
-      "\n\toperation\030\002 \001(\t\022\032\n\022reservationDetails\030" +
-      "\003 \001(\t\"Q\n\020ReservationReply\022\017\n\007message\030\001 \001" +
-      "(\t\022\020\n\010reserved\030\002 \001(\010\022\032\n\022reservationDetai" +
-      "ls\030\003 \001(\t2\312\001\n#TrackingSpacesAndReservatio" +
-      "nService\022L\n\rTrackingSpots\022\026.google.proto" +
-      "buf.Empty\032\037.smartparking.SpotsAvailabili" +
-      "ty\"\0000\001\022U\n\013Reservation\022 .smartparking.Res" +
-      "ervationRequest\032\036.smartparking.Reservati" +
-      "onReply\"\000(\0010\001BQ\n+grpc.generated.Tracking" +
-      "SpacesAndReservationB TrackingSpacesAndR" +
-      "eservationImplP\001b\006proto3"
+      "\"@\n\022ReservationRequest\022\016\n\006userID\030\001 \001(\t\022\014" +
+      "\n\004date\030\002 \001(\t\022\014\n\004time\030\003 \001(\t\"Q\n\020Reservatio" +
+      "nReply\022\017\n\007message\030\001 \001(\t\022\020\n\010reserved\030\002 \001(" +
+      "\010\022\032\n\022reservationDetails\030\003 \001(\t2\312\001\n#Tracki" +
+      "ngSpacesAndReservationService\022L\n\rTrackin" +
+      "gSpots\022\026.google.protobuf.Empty\032\037.smartpa" +
+      "rking.SpotsAvailability\"\0000\001\022U\n\013Reservati" +
+      "on\022 .smartparking.ReservationRequest\032\036.s" +
+      "martparking.ReservationReply\"\000(\0010\001BQ\n+gr" +
+      "pc.generated.TrackingSpacesAndReservatio" +
+      "nB TrackingSpacesAndReservationImplP\001b\006p" +
+      "roto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -78,7 +78,7 @@ public final class TrackingSpacesAndReservationImpl {
     internal_static_smartparking_ReservationRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_smartparking_ReservationRequest_descriptor,
-        new java.lang.String[] { "UserID", "Operation", "ReservationDetails", });
+        new java.lang.String[] { "UserID", "Date", "Time", });
     internal_static_smartparking_ReservationReply_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_smartparking_ReservationReply_fieldAccessorTable = new
