@@ -6,6 +6,7 @@ package distsys.smartparking;
 
 import com.google.protobuf.Empty;
 import grpc.generated.TrackingSpacesAndReservation.ReservationReply;
+import grpc.generated.TrackingSpacesAndReservation.ReservationRequest;
 import java.io.IOException;
 import java.util.logging.Logger;
 import grpc.generated.VehicleEntryExit.ClientRequest;
@@ -95,15 +96,13 @@ public class SmartParkingServer{
     */
     
     public static class TrackingSpacesAndReservationServiceImpl extends TrackingSpacesAndReservationServiceImplBase {
+        //generating random number of spots available for parking
+        Random random = new Random();
+        int emptySpots = random.nextInt(101);
         @Override
         public void trackingSpots(Empty request, StreamObserver<SpotsAvailability> responseObserver){
 
             System.out.println("Checking available spots"); 
-
-            //generating random number of spots available for parking
-            Random random = new Random();
-            int emptySpots = random.nextInt(101);
-
 
             do{            
                 SpotsAvailability reply = SpotsAvailability.newBuilder().setEmptySpots(emptySpots).build();
@@ -139,5 +138,23 @@ public class SmartParkingServer{
             responseObserver.onCompleted();
         }
         
+    
+        public void reservation(ReservationRequest request, StreamObserver<ReservationReply> responseObserver){
+            boolean confirmed = false;
+            String userID = request.getUserID();
+            String date = request.getDate();
+            String time = request.getTime();
+            if(emptySpots > 0){
+                emptySpots --;
+                confirmed = true;
+
+                System.out.println("Reservation made for: " +
+                                 "\nUser ID: " + userID +
+                                 "\nDate: " + date  +
+                                 "\nTime: " + time);
+            }else{
+                System.out.println("No spots available to be reserved.");
+            }
+        }
     }
 }

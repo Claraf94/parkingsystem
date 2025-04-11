@@ -15,6 +15,7 @@ import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
 
 /**
  *
@@ -25,6 +26,7 @@ public class ReservationGUI extends javax.swing.JFrame {
     // Non-blocking stub to make asynchronous calls
     TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub asyncStub;
     ManagedChannel channel;
+    boolean confirmed = false;
 
     /**
      * Creates new form ReservationGUI
@@ -59,6 +61,8 @@ public class ReservationGUI extends javax.swing.JFrame {
         outputDetails = new javax.swing.JTextField();
         operation = new javax.swing.JButton();
         userIDValue = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        getID = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,114 +117,170 @@ public class ReservationGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Click on the button below to generate an User ID");
+
+        getID.setText("get ID");
+        getID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getIDActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(operation)
+                .addGap(128, 128, 128))
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(outputDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(outputDetails)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(operation))
-                    .addComponent(labelDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(userIDLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(userIDValue, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(userIDLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(userIDValue, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 17, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(165, 165, 165)
+                .addComponent(getID)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(userIDLabel)
-                            .addComponent(userIDValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(operation)
-                        .addGap(1, 1, 1)))
+                .addGap(37, 37, 37)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getID)
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(userIDLabel)
+                    .addComponent(userIDValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(3, 3, 3)
+                .addComponent(operation)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGap(38, 38, 38)
                 .addComponent(labelDetails)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(outputDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(outputDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void timeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeActionPerformed
-        // TODO add your handling code here:
+       String setTime = time.getText();
+       
+       //verifying the format
+        if(setTime.matches("([01][0-9]|2[0-3]):([0-5][0-9])")){
+           outputDetails.setText("Selected Time: " + setTime);
+        }else{
+            outputDetails.setText("Format not supported.");
+        }
     }//GEN-LAST:event_timeActionPerformed
 
     private void outputDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outputDetailsActionPerformed
-        // TODO add your handling code here:
+        String setDate = date.getText();
+        String setTime = time.getText();
+        String userID = userIDValue.getText();
+        
+        
     }//GEN-LAST:event_outputDetailsActionPerformed
 
     private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
-        // TODO add your handling code here:
+        String setDate = date.getText();
+        
+        //verifying the format
+        if(setDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/2025$")){
+            outputDetails.setText("Selected Date: " + setDate);
+        }else{
+            outputDetails.setText("Format not supported.");
+        }            
     }//GEN-LAST:event_dateActionPerformed
 
     private void operationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationActionPerformed
         String userID = userIDValue.getText();
         String reservationDate = date.getText();
         String reservationTime = time.getText();
-        String reservationDetails = "";
         
-        requestReservation(userID, reservationDate, reservationTime, reservationDetails); 
+        requestReservation(userID, reservationDate, reservationTime); 
     }//GEN-LAST:event_operationActionPerformed
 
+    private void getIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getIDActionPerformed
+        String userID = UUID.randomUUID().toString();
+        userIDValue.setText(userID);
+    }//GEN-LAST:event_getIDActionPerformed
+
     private void userIDValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDValueActionPerformed
-        // TODO add your handling code here:
+        String userID = this.userIDValue.getText();
+        System.out.println(userID);
     }//GEN-LAST:event_userIDValueActionPerformed
-    
-    private void requestReservation(String userID, String date, String time, String details){
-        StreamObserver<ReservationRequest> requestObserver = asyncStub.reservation(new StreamObserver<ReservationReply>(){
+            
+    private void requestReservation(String userID, String date, String time){        boolean confirmed = false;
+        StreamObserver<ReservationReply> responseObserver = new StreamObserver<ReservationReply>(){
             @Override
                 public void onNext(ReservationReply reply){
-                    outputDetails.setText(reply.getMessage());
+                    if(confirmed == true){         
+                        outputDetails.setText(reply.getMessage());
+                        outputDetails.setText(reply.getReservationDetails());   
+                    }else{
+                        outputDetails.setText(reply.getMessage());
+                        outputDetails.setText(reply.getReservationDetails());
+                    }
                 }
             
                 @Override
                 public void onError(Throwable t){
-                    outputDetails.setText("Error requesting the operation. " +t.getMessage());
+                    outputDetails.setText("Error requesting the operation. " +t.getLocalizedMessage());
                 }
             
                 @Override
                 public void onCompleted() {
                     logger.info("Operation completed.");
                 }
-        });   
+        };   
         
-        ReservationRequest request = ReservationRequest.newBuilder()
-                                    .setUserID(userID)
-                                    .setDate(date)
-                                    .setTime(time)
-                                    .setReservationDetails(reservationDetails)
-                                    .build();
+        StreamObserver<ReservationRequest> requestObserver = asyncStub.reservation(responseObserver);
         
-        requestObserver.onNext(request);
-        requestObserver.onCompleted();
+        try{
+            ReservationRequest request = ReservationRequest.newBuilder()
+                                        .setUserID(userID)
+                                        .setDate(date)
+                                        .setTime(time)
+                                        .build();    
+       
+            requestObserver.onNext(request);
+
+            requestObserver.onCompleted();
+        
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
 
     }
     /**
@@ -260,6 +320,8 @@ public class ReservationGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField date;
+    private javax.swing.JButton getID;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel labelDetails;
