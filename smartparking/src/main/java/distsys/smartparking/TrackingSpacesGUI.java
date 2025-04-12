@@ -5,8 +5,9 @@
 package distsys.smartparking;
 
 import com.google.protobuf.Empty;
-import grpc.generated.TrackingSpacesAndReservation.SpotsAvailability;
-import grpc.generated.TrackingSpacesAndReservation.TrackingSpacesAndReservationServiceGrpc;
+import grpc.generated.TrackingSpaces.SpotsAvailability;
+import grpc.generated.TrackingSpaces.SpotsAvailability;
+import grpc.generated.TrackingSpaces.TrackingSpacesServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -17,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import static jdk.internal.net.http.common.Log.channel;
 
 /**
  *
@@ -25,7 +25,7 @@ import static jdk.internal.net.http.common.Log.channel;
  */
 public class TrackingSpacesGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(TrackingSpacesGUI.class.getName());
-    TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub stub;
+    TrackingSpacesServiceGrpc.TrackingSpacesServiceStub stub;
     ManagedChannel channel;
     
     /**
@@ -41,7 +41,7 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
                 forAddress(host, port)
                 .usePlaintext()
                 .build();
-        stub = TrackingSpacesAndReservationServiceGrpc.newStub(channel);
+        stub = TrackingSpacesServiceGrpc.newStub(channel);
     }
 
     /**

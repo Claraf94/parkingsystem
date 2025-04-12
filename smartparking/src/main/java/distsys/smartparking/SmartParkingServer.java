@@ -5,35 +5,42 @@
 package distsys.smartparking;
 
 import com.google.protobuf.Empty;
-import grpc.generated.TrackingSpacesAndReservation.ReservationReply;
-import grpc.generated.TrackingSpacesAndReservation.ReservationRequest;
+import grpc.generated.TrackingSpaces.TrackingSpacesImpl;
+import grpc.generated.TrackingSpaces.TrackingSpacesServiceGrpc.TrackingSpacesServiceImplBase;
+import grpc.generated.Reservation.ReservationReply;
+import grpc.generated.Reservation.ReservationRequest;
 import java.io.IOException;
 import java.util.logging.Logger;
 import grpc.generated.VehicleEntryExit.ClientRequest;
 import grpc.generated.VehicleEntryExit.ClientReply;
 import grpc.generated.VehicleEntryExit.VehicleEntryExitServiceGrpc.VehicleEntryExitServiceImplBase;
-import grpc.generated.TrackingSpacesAndReservation.SpotsAvailability;
-import grpc.generated.TrackingSpacesAndReservation.TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceImplBase;
+import grpc.generated.TrackingSpaces.SpotsAvailability;
+import grpc.generated.TrackingSpaces.TrackingSpacesServiceGrpc.TrackingSpacesServiceImplBase;
+import grpc.generated.Reservation.ReservationServiceGrpc.ReservationServiceImplBase;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class SmartParkingServer{
+public class SmartParkingServer {
 
     private static final Logger logger = Logger.getLogger(SmartParkingServer.class.getName());
 
     public static void main(String[] args) {
-        
-        VehicleEntryExitServiceImpl vehicleEntryExitService = new VehicleEntryExitServiceImpl(){};
-        TrackingSpacesAndReservationServiceImpl trackingSpacesAndReservationService = new TrackingSpacesAndReservationServiceImpl() {};
+
+        VehicleEntryExitServiceImpl vehicleEntryExitService = new VehicleEntryExitServiceImpl();
+        TrackingSpacesServiceImpl trackingSpacesService = new TrackingSpacesServiceImpl();
+        ReservationServiceImpl ReservationService = new ReservationServiceImpl();
+
         int port = 50051;
 
         try {
             Server server = ServerBuilder.forPort(port)
                     .addService(vehicleEntryExitService)
-                    .addService(trackingSpacesAndReservationService)
+                    .addService(trackingSpacesService)
+                    .addService(ReservationService)
                     .build()
                     .start();
             logger.info("Server started, listening on " + port);
@@ -50,13 +57,15 @@ public class SmartParkingServer{
         }
 
     }
+
     /*
     *
     *This service is a unary service and returns information about entry/exit of vehicles
-    */
+     */
     public static class VehicleEntryExitServiceImpl extends VehicleEntryExitServiceImplBase {
+
         @Override
-        public void performingVehicleEntryExit (ClientRequest request, StreamObserver<ClientReply> responseObserver) {
+        public void performingVehicleEntryExit(ClientRequest request, StreamObserver<ClientReply> responseObserver) {
 
             System.out.println("Receiving vehicle entry/exit request");
             //checking if the vehicle is leaving or entrying the parking area
@@ -66,52 +75,54 @@ public class SmartParkingServer{
             boolean confirmation = false;
             //generating random confirmation(true or not) for the payment to confirm the exit
             boolean paidTicket = new Random().nextBoolean();
-            
-            if("Entry".equalsIgnoreCase(operation)){
+
+            if ("Entry".equalsIgnoreCase(operation)) {
                 System.out.println("Vehicle entry number plate: " + request.getNumberPlate());
                 confirmation = true;
-            }else{
+            } else {
                 System.out.println("Vehicle exit number plate: " + request.getNumberPlate());
-                if(paidTicket){
+                if (paidTicket) {
                     confirmation = true;
                     System.out.println("Ticket was paid.");
-                }else{
+                } else {
                     confirmation = false;
                     System.out.println("Ticket wasn't paid.");
                 }
             }
 
-            ClientReply reply = ClientReply.newBuilder().setMessage("Vehicle number plate: " + request.getNumberPlate() + 
-                                ".\nOperation: " + request.getOperation()).setConfirmation(confirmation).build();
+            ClientReply reply = ClientReply.newBuilder().setMessage("Vehicle number plate: " + request.getNumberPlate()
+                    + ".\nOperation: " + request.getOperation()).setConfirmation(confirmation).build();
 
             responseObserver.onNext(reply);
 
             responseObserver.onCompleted();
         }
     }
-    
+
     /*
     *
     *This service is a service streaming and returns information about available spots to park 
-    */
+     */
     
-    public static class TrackingSpacesAndReservationServiceImpl extends TrackingSpacesAndReservationServiceImplBase {
+    public static class TrackingSpacesServiceImpl extends TrackingSpacesServiceImplBase {
+
         //generating random number of spots available for parking
         Random random = new Random();
-        int emptySpots = random.nextInt(101);
+        int emptySpots = new Random().nextInt(101);
+
         @Override
-        public void trackingSpots(Empty request, StreamObserver<SpotsAvailability> responseObserver){
+        public void trackingSpots(Empty request, StreamObserver<SpotsAvailability> responseObserver) {
 
-            System.out.println("Checking available spots"); 
+            System.out.println("Checking available spots");
 
-            do{            
+            do {
                 SpotsAvailability reply = SpotsAvailability.newBuilder().setEmptySpots(emptySpots).build();
 
                 responseObserver.onNext(reply);
 
-                try{
+                try {
                     Thread.sleep(5000);
-                }catch(InterruptedException e){
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
@@ -119,7 +130,7 @@ public class SmartParkingServer{
                 int operation = random.nextInt(2);
                 int update = 0;
 
-                switch(operation){
+                switch (operation) {
                     //vehicle entry
                     case 0:
                         update = 1;
@@ -132,29 +143,58 @@ public class SmartParkingServer{
 
                 emptySpots = emptySpots + update;
 
-            }while(emptySpots > 0 && emptySpots <= 100);
+            } while (emptySpots > 0 && emptySpots <= 100);
 
             System.out.println("No more spots available for parking.");
             responseObserver.onCompleted();
         }
-        
+    }
     
-        public void reservation(ReservationRequest request, StreamObserver<ReservationReply> responseObserver){
-            boolean confirmed = false;
-            String userID = request.getUserID();
-            String date = request.getDate();
-            String time = request.getTime();
-            if(emptySpots > 0){
-                emptySpots --;
-                confirmed = true;
+    public static class ReservationServiceImpl extends ReservationServiceImplBase {
+        Random random = new Random();
+        int emptySpots = new Random().nextInt(101);
+        List<String> reservations = new ArrayList<String>();
+        
+        public StreamObserver<ReservationRequest> reservation(StreamObserver<ReservationReply> responseObserver) {
+            return new StreamObserver<ReservationRequest>() {
+                boolean reserved = emptySpots > 0;
+                String message;
+                String reservationDetails = "";
 
-                System.out.println("Reservation made for: " +
-                                 "\nUser ID: " + userID +
-                                 "\nDate: " + date  +
-                                 "\nTime: " + time);
-            }else{
-                System.out.println("No spots available to be reserved.");
-            }
+                @Override
+                public void onNext(ReservationRequest request) {
+                    System.out.println("Reservation request received from the user: " + request.getUserID());
+                    if (reserved) {
+                        message = "Reservation successfully done for:\n";
+                        reservationDetails = "User ID: " + request.getUserID() +
+                                "\non " + request.getDate() + 
+                                "\nat " + request.getTime();
+                        emptySpots--;
+                        reservations.add(request.getUserID());
+                    } else {
+                        message = "No more available spots for reservation.";
+                    }
+
+                    ReservationReply reply = ReservationReply.newBuilder()
+                            .setReserved(reserved)
+                            .setMessage(message)
+                            .setReservationDetails(reservationDetails)
+                    .build();
+
+                    responseObserver.onNext(reply);
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    System.out.println("Erro while trying to make the reservation: " + t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    System.out.println("Completed.");
+                    responseObserver.onCompleted();
+                }
+            };
         }
     }
 }

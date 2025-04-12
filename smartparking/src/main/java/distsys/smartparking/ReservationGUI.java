@@ -4,18 +4,15 @@
  */
 package distsys.smartparking;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.time;
-import grpc.generated.TrackingSpacesAndReservation.ReservationReply;
-import grpc.generated.TrackingSpacesAndReservation.ReservationRequest;
-import grpc.generated.TrackingSpacesAndReservation.TrackingSpacesAndReservationServiceGrpc;
+
+import grpc.generated.Reservation.ReservationReply;
+import grpc.generated.Reservation.ReservationRequest;
+import grpc.generated.Reservation.ReservationServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
 
 /**
  *
@@ -23,10 +20,11 @@ import javax.swing.JTextField;
  */
 public class ReservationGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(ReservationGUI.class.getName());
+    private StreamObserver<ReservationRequest> requestObserver;
+    private boolean confirmed = false;
     // Non-blocking stub to make asynchronous calls
-    TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub asyncStub;
+    ReservationServiceGrpc.ReservationServiceStub asyncStub;
     ManagedChannel channel;
-    boolean confirmed = false;
 
     /**
      * Creates new form ReservationGUI
@@ -40,7 +38,7 @@ public class ReservationGUI extends javax.swing.JFrame {
                 forAddress(host, port)
                 .usePlaintext()
                 .build();
-        asyncStub = TrackingSpacesAndReservationServiceGrpc.newStub(channel);
+        asyncStub = ReservationServiceGrpc.newStub(channel);
     }
 
     /**
@@ -150,12 +148,12 @@ public class ReservationGUI extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(userIDLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(userIDValue, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 17, Short.MAX_VALUE)))
+                        .addGap(0, 17, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(userIDLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(userIDValue)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(165, 165, 165)
@@ -208,15 +206,13 @@ public class ReservationGUI extends javax.swing.JFrame {
         String setDate = date.getText();
         String setTime = time.getText();
         String userID = userIDValue.getText();
-        
-        
     }//GEN-LAST:event_outputDetailsActionPerformed
 
     private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
         String setDate = date.getText();
         
         //verifying the format
-        if(setDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/2025$")){
+        if(setDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/202[5]$")){
             outputDetails.setText("Selected Date: " + setDate);
         }else{
             outputDetails.setText("Format not supported.");
@@ -241,47 +237,41 @@ public class ReservationGUI extends javax.swing.JFrame {
         System.out.println(userID);
     }//GEN-LAST:event_userIDValueActionPerformed
             
-    private void requestReservation(String userID, String date, String time){        boolean confirmed = false;
-        StreamObserver<ReservationReply> responseObserver = new StreamObserver<ReservationReply>(){
+    private void requestReservation(String userID, String date, String time) {
+        StreamObserver<ReservationReply> responseObserver = new StreamObserver<ReservationReply>() {
             @Override
-                public void onNext(ReservationReply reply){
-                    if(confirmed == true){         
-                        outputDetails.setText(reply.getMessage());
-                        outputDetails.setText(reply.getReservationDetails());   
-                    }else{
-                        outputDetails.setText(reply.getMessage());
-                        outputDetails.setText(reply.getReservationDetails());
+            public void onNext(ReservationReply reply) {
+                String details = reply.getMessage() + "\n";
+                    if (reply.getReserved()) {
+                        details += reply.getReservationDetails();
                     }
-                }
-            
-                @Override
-                public void onError(Throwable t){
-                    outputDetails.setText("Error requesting the operation. " +t.getLocalizedMessage());
-                }
-            
-                @Override
-                public void onCompleted() {
-                    logger.info("Operation completed.");
-                }
-        };   
-        
-        StreamObserver<ReservationRequest> requestObserver = asyncStub.reservation(responseObserver);
-        
-        try{
+                    outputDetails.setText(details);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                outputDetails.setText("Error requesting the operation. " + t.getLocalizedMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                logger.info("Operation completed.");
+            }
+        };
+
+        requestObserver = asyncStub.reservation(responseObserver);
+
+        try {
             ReservationRequest request = ReservationRequest.newBuilder()
-                                        .setUserID(userID)
-                                        .setDate(date)
-                                        .setTime(time)
-                                        .build();    
-       
+                    .setUserID(userID)
+                    .setDate(date)
+                    .setTime(time)
+                    .build();
+
             requestObserver.onNext(request);
 
-            requestObserver.onCompleted();
-        
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
         }
-
     }
     /**
      * @param args the command line arguments
