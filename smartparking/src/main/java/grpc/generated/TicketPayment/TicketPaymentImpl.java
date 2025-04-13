@@ -15,15 +15,15 @@ public final class TicketPaymentImpl {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_smartparking_ClientRequest_descriptor;
+    internal_static_smartparking_TicketPaymentRequest_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_smartparking_ClientRequest_fieldAccessorTable;
+      internal_static_smartparking_TicketPaymentRequest_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_smartparking_ClientReply_descriptor;
+    internal_static_smartparking_TicketPaymentReply_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_smartparking_ClientReply_fieldAccessorTable;
+      internal_static_smartparking_TicketPaymentReply_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -33,15 +33,15 @@ public final class TicketPaymentImpl {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023TicketPayment.proto\022\014smartparking\"G\n\rC" +
-      "lientRequest\022\023\n\013paymentType\030\001 \001(\t\022\016\n\006amo" +
-      "unt\030\002 \001(\001\022\021\n\tpaymentID\030\003 \001(\t\"6\n\013ClientRe" +
-      "ply\022\024\n\014confirmation\030\002 \001(\010\022\021\n\treceiptID\030\003" +
-      " \001(\t2d\n\024TicketPaymentService\022L\n\016ProcessP" +
-      "ayment\022\033.smartparking.ClientRequest\032\031.sm" +
-      "artparking.ClientReply\"\000(\001B3\n\034grpc.gener" +
-      "ated.TicketPaymentB\021TicketPaymentImplP\001b" +
-      "\006proto3"
+      "\n\023TicketPayment.proto\022\014smartparking\"N\n\024T" +
+      "icketPaymentRequest\022\023\n\013paymentType\030\001 \001(\t" +
+      "\022\016\n\006amount\030\002 \001(\001\022\021\n\tpaymentID\030\003 \001(\t\"=\n\022T" +
+      "icketPaymentReply\022\024\n\014confirmation\030\002 \001(\010\022" +
+      "\021\n\treceiptID\030\003 \001(\t2r\n\024TicketPaymentServi" +
+      "ce\022Z\n\016ProcessPayment\022\".smartparking.Tick" +
+      "etPaymentRequest\032 .smartparking.TicketPa" +
+      "ymentReply\"\000(\001B3\n\034grpc.generated.TicketP" +
+      "aymentB\021TicketPaymentImplP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -55,17 +55,17 @@ public final class TicketPaymentImpl {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_smartparking_ClientRequest_descriptor =
+    internal_static_smartparking_TicketPaymentRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_smartparking_ClientRequest_fieldAccessorTable = new
+    internal_static_smartparking_TicketPaymentRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_smartparking_ClientRequest_descriptor,
+        internal_static_smartparking_TicketPaymentRequest_descriptor,
         new java.lang.String[] { "PaymentType", "Amount", "PaymentID", });
-    internal_static_smartparking_ClientReply_descriptor =
+    internal_static_smartparking_TicketPaymentReply_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_smartparking_ClientReply_fieldAccessorTable = new
+    internal_static_smartparking_TicketPaymentReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_smartparking_ClientReply_descriptor,
+        internal_static_smartparking_TicketPaymentReply_descriptor,
         new java.lang.String[] { "Confirmation", "ReceiptID", });
   }
 

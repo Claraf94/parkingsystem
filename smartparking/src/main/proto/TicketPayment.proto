@@ -8,18 +8,18 @@ package smartparking;
 
 //This service will process the ticket payment - Client Streaming
 service TicketPaymentService{
-    rpc ProcessPayment(stream ClientRequest) returns (ClientReply){}
+    rpc ProcessPayment(stream TicketPaymentRequest) returns (TicketPaymentReply){}
 }
 
 //Request message for making payment
-message ClientRequest{
+message TicketPaymentRequest{
     string paymentType = 1; //Card, cash, voucher
     double amount = 2;
     string paymentID = 3;
 }
 
 //Reply message for making payment
-message ClientReply{
+message TicketPaymentReply{
     bool confirmation = 2; //Confirmation about the status of the payment
     string receiptID = 3; 
 }

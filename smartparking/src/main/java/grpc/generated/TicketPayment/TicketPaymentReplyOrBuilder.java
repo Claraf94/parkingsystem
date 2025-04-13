@@ -3,8 +3,8 @@
 
 package grpc.generated.TicketPayment;
 
-public interface ClientReplyOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:smartparking.ClientReply)
+public interface TicketPaymentReplyOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:smartparking.TicketPaymentReply)
     com.google.protobuf.MessageOrBuilder {
 
   /**

@@ -17,12 +17,16 @@ import grpc.generated.VehicleEntryExit.VehicleEntryExitServiceGrpc.VehicleEntryE
 import grpc.generated.TrackingSpaces.SpotsAvailability;
 import grpc.generated.TrackingSpaces.TrackingSpacesServiceGrpc.TrackingSpacesServiceImplBase;
 import grpc.generated.Reservation.ReservationServiceGrpc.ReservationServiceImplBase;
+import grpc.generated.TicketPayment.TicketPaymentReply;
+import grpc.generated.TicketPayment.TicketPaymentRequest;
+import grpc.generated.TicketPayment.TicketPaymentServiceGrpc.TicketPaymentServiceImplBase;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class SmartParkingServer {
 
@@ -32,7 +36,8 @@ public class SmartParkingServer {
 
         VehicleEntryExitServiceImpl vehicleEntryExitService = new VehicleEntryExitServiceImpl();
         TrackingSpacesServiceImpl trackingSpacesService = new TrackingSpacesServiceImpl();
-        ReservationServiceImpl ReservationService = new ReservationServiceImpl();
+        ReservationServiceImpl reservationService = new ReservationServiceImpl();
+        TicketPaymentServiceImpl ticketPaymentService = new TicketPaymentServiceImpl();
 
         int port = 50051;
 
@@ -40,7 +45,8 @@ public class SmartParkingServer {
             Server server = ServerBuilder.forPort(port)
                     .addService(vehicleEntryExitService)
                     .addService(trackingSpacesService)
-                    .addService(ReservationService)
+                    .addService(reservationService)
+                    .addService(ticketPaymentService)
                     .build()
                     .start();
             logger.info("Server started, listening on " + port);
@@ -103,7 +109,6 @@ public class SmartParkingServer {
     *
     *This service is a service streaming and returns information about available spots to park 
      */
-    
     public static class TrackingSpacesServiceImpl extends TrackingSpacesServiceImplBase {
 
         //generating random number of spots available for parking
@@ -149,12 +154,13 @@ public class SmartParkingServer {
             responseObserver.onCompleted();
         }
     }
-    
+
     public static class ReservationServiceImpl extends ReservationServiceImplBase {
+
         Random random = new Random();
         int emptySpots = new Random().nextInt(101);
         List<String> reservations = new ArrayList<String>();
-        
+
         public StreamObserver<ReservationRequest> reservation(StreamObserver<ReservationReply> responseObserver) {
             return new StreamObserver<ReservationRequest>() {
                 boolean reserved = emptySpots > 0;
@@ -165,10 +171,12 @@ public class SmartParkingServer {
                 public void onNext(ReservationRequest request) {
                     System.out.println("Reservation request received from the user: " + request.getUserID());
                     if (reserved) {
-                        message = "Reservation successfully done for:\n";
-                        reservationDetails = "User ID: " + request.getUserID() +
-                                "\non " + request.getDate() + 
-                                "\nat " + request.getTime();
+                        message = "Reservation successfully done for:";
+                        reservationDetails = "User ID: " + request.getUserID() + "\n"
+                                + "Date: " + request.getDate() + "\n"
+                                + "Time: " + request.getTime() + "\n"
+                                + "Reservation ID: " + request.getReservationID();
+
                         emptySpots--;
                         reservations.add(request.getUserID());
                     } else {
@@ -179,7 +187,7 @@ public class SmartParkingServer {
                             .setReserved(reserved)
                             .setMessage(message)
                             .setReservationDetails(reservationDetails)
-                    .build();
+                            .build();
 
                     responseObserver.onNext(reply);
                 }
@@ -192,6 +200,45 @@ public class SmartParkingServer {
                 @Override
                 public void onCompleted() {
                     System.out.println("Completed.");
+                    responseObserver.onCompleted();
+                }
+            };
+        }
+    }
+
+    public static class TicketPaymentServiceImpl extends TicketPaymentServiceImplBase {
+        @Override
+        public StreamObserver<TicketPaymentRequest> processPayment(StreamObserver<TicketPaymentReply> responseObserver) {
+            return new StreamObserver<TicketPaymentRequest>() {
+                double total = 0;
+
+                @Override
+                public void onNext(TicketPaymentRequest request) {
+                    System.out.println("Received payment:");
+                    System.out.println("Type: " + request.getPaymentType());
+                    System.out.println("Amount: €" + request.getAmount());
+                    System.out.println("ID: " + request.getPaymentID());
+
+                    total += request.getAmount();
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    System.out.println("Error receiving payment: " + t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    String receipt = UUID.randomUUID().toString();
+
+                    TicketPaymentReply reply = TicketPaymentReply.newBuilder()
+                            .setConfirmation(true)
+                            .setReceiptID(receipt)
+                            .build();
+
+                    System.out.println("Payment complete. Total: €" + total + ", Receipt: " + receipt);
+
+                    responseObserver.onNext(reply);
                     responseObserver.onCompleted();
                 }
             };

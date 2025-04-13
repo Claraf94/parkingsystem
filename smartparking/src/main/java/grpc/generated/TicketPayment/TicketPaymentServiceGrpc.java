@@ -30,30 +30,30 @@ public final class TicketPaymentServiceGrpc {
   public static final String SERVICE_NAME = "smartparking.TicketPaymentService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<grpc.generated.TicketPayment.ClientRequest,
-      grpc.generated.TicketPayment.ClientReply> getProcessPaymentMethod;
+  private static volatile io.grpc.MethodDescriptor<grpc.generated.TicketPayment.TicketPaymentRequest,
+      grpc.generated.TicketPayment.TicketPaymentReply> getProcessPaymentMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "ProcessPayment",
-      requestType = grpc.generated.TicketPayment.ClientRequest.class,
-      responseType = grpc.generated.TicketPayment.ClientReply.class,
+      requestType = grpc.generated.TicketPayment.TicketPaymentRequest.class,
+      responseType = grpc.generated.TicketPayment.TicketPaymentReply.class,
       methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
-  public static io.grpc.MethodDescriptor<grpc.generated.TicketPayment.ClientRequest,
-      grpc.generated.TicketPayment.ClientReply> getProcessPaymentMethod() {
-    io.grpc.MethodDescriptor<grpc.generated.TicketPayment.ClientRequest, grpc.generated.TicketPayment.ClientReply> getProcessPaymentMethod;
+  public static io.grpc.MethodDescriptor<grpc.generated.TicketPayment.TicketPaymentRequest,
+      grpc.generated.TicketPayment.TicketPaymentReply> getProcessPaymentMethod() {
+    io.grpc.MethodDescriptor<grpc.generated.TicketPayment.TicketPaymentRequest, grpc.generated.TicketPayment.TicketPaymentReply> getProcessPaymentMethod;
     if ((getProcessPaymentMethod = TicketPaymentServiceGrpc.getProcessPaymentMethod) == null) {
       synchronized (TicketPaymentServiceGrpc.class) {
         if ((getProcessPaymentMethod = TicketPaymentServiceGrpc.getProcessPaymentMethod) == null) {
           TicketPaymentServiceGrpc.getProcessPaymentMethod = getProcessPaymentMethod = 
-              io.grpc.MethodDescriptor.<grpc.generated.TicketPayment.ClientRequest, grpc.generated.TicketPayment.ClientReply>newBuilder()
+              io.grpc.MethodDescriptor.<grpc.generated.TicketPayment.TicketPaymentRequest, grpc.generated.TicketPayment.TicketPaymentReply>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(
                   "smartparking.TicketPaymentService", "ProcessPayment"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  grpc.generated.TicketPayment.ClientRequest.getDefaultInstance()))
+                  grpc.generated.TicketPayment.TicketPaymentRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  grpc.generated.TicketPayment.ClientReply.getDefaultInstance()))
+                  grpc.generated.TicketPayment.TicketPaymentReply.getDefaultInstance()))
                   .setSchemaDescriptor(new TicketPaymentServiceMethodDescriptorSupplier("ProcessPayment"))
                   .build();
           }
@@ -94,8 +94,8 @@ public final class TicketPaymentServiceGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.ClientRequest> processPayment(
-        io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.ClientReply> responseObserver) {
+    public io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentRequest> processPayment(
+        io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentReply> responseObserver) {
       return asyncUnimplementedStreamingCall(getProcessPaymentMethod(), responseObserver);
     }
 
@@ -105,8 +105,8 @@ public final class TicketPaymentServiceGrpc {
             getProcessPaymentMethod(),
             asyncClientStreamingCall(
               new MethodHandlers<
-                grpc.generated.TicketPayment.ClientRequest,
-                grpc.generated.TicketPayment.ClientReply>(
+                grpc.generated.TicketPayment.TicketPaymentRequest,
+                grpc.generated.TicketPayment.TicketPaymentReply>(
                   this, METHODID_PROCESS_PAYMENT)))
           .build();
     }
@@ -135,8 +135,8 @@ public final class TicketPaymentServiceGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.ClientRequest> processPayment(
-        io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.ClientReply> responseObserver) {
+    public io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentRequest> processPayment(
+        io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentReply> responseObserver) {
       return asyncClientStreamingCall(
           getChannel().newCall(getProcessPaymentMethod(), getCallOptions()), responseObserver);
     }
@@ -217,7 +217,7 @@ public final class TicketPaymentServiceGrpc {
       switch (methodId) {
         case METHODID_PROCESS_PAYMENT:
           return (io.grpc.stub.StreamObserver<Req>) serviceImpl.processPayment(
-              (io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.ClientReply>) responseObserver);
+              (io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentReply>) responseObserver);
         default:
           throw new AssertionError();
       }

@@ -33,15 +33,16 @@ public final class ReservationImpl {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\021Reservation.proto\022\014smartparking\"@\n\022Res" +
+      "\n\021Reservation.proto\022\014smartparking\"W\n\022Res" +
       "ervationRequest\022\016\n\006userID\030\001 \001(\t\022\014\n\004date\030" +
-      "\002 \001(\t\022\014\n\004time\030\003 \001(\t\"Q\n\020ReservationReply\022" +
-      "\017\n\007message\030\001 \001(\t\022\020\n\010reserved\030\002 \001(\010\022\032\n\022re" +
-      "servationDetails\030\003 \001(\t2k\n\022ReservationSer" +
-      "vice\022U\n\013Reservation\022 .smartparking.Reser" +
-      "vationRequest\032\036.smartparking.Reservation" +
-      "Reply\"\000(\0010\001B/\n\032grpc.generated.Reservatio" +
-      "nB\017ReservationImplP\001b\006proto3"
+      "\002 \001(\t\022\014\n\004time\030\003 \001(\t\022\025\n\rreservationID\030\004 \001" +
+      "(\t\"Q\n\020ReservationReply\022\017\n\007message\030\001 \001(\t\022" +
+      "\020\n\010reserved\030\002 \001(\010\022\032\n\022reservationDetails\030" +
+      "\003 \001(\t2k\n\022ReservationService\022U\n\013Reservati" +
+      "on\022 .smartparking.ReservationRequest\032\036.s" +
+      "martparking.ReservationReply\"\000(\0010\001B/\n\032gr" +
+      "pc.generated.ReservationB\017ReservationImp" +
+      "lP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -60,7 +61,7 @@ public final class ReservationImpl {
     internal_static_smartparking_ReservationRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_smartparking_ReservationRequest_descriptor,
-        new java.lang.String[] { "UserID", "Date", "Time", });
+        new java.lang.String[] { "UserID", "Date", "Time", "ReservationID", });
     internal_static_smartparking_ReservationReply_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_smartparking_ReservationReply_fieldAccessorTable = new

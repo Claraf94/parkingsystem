@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
  */
 public class TrackingSpacesGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(TrackingSpacesGUI.class.getName());
-    TrackingSpacesServiceGrpc.TrackingSpacesServiceStub stub;
+    private static TrackingSpacesServiceGrpc.TrackingSpacesServiceStub stub;
     ManagedChannel channel;
     
     /**

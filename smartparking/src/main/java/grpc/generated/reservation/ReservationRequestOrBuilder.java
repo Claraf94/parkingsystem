@@ -36,4 +36,14 @@ public interface ReservationRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getTimeBytes();
+
+  /**
+   * <code>string reservationID = 4;</code>
+   */
+  java.lang.String getReservationID();
+  /**
+   * <code>string reservationID = 4;</code>
+   */
+  com.google.protobuf.ByteString
+      getReservationIDBytes();
 }

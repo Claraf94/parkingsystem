@@ -23,6 +23,7 @@ private static final long serialVersionUID = 0L;
     userID_ = "";
     date_ = "";
     time_ = "";
+    reservationID_ = "";
   }
 
   @java.lang.Override
@@ -65,6 +66,12 @@ private static final long serialVersionUID = 0L;
             java.lang.String s = input.readStringRequireUtf8();
 
             time_ = s;
+            break;
+          }
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            reservationID_ = s;
             break;
           }
           default: {
@@ -201,6 +208,40 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int RESERVATIONID_FIELD_NUMBER = 4;
+  private volatile java.lang.Object reservationID_;
+  /**
+   * <code>string reservationID = 4;</code>
+   */
+  public java.lang.String getReservationID() {
+    java.lang.Object ref = reservationID_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      reservationID_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string reservationID = 4;</code>
+   */
+  public com.google.protobuf.ByteString
+      getReservationIDBytes() {
+    java.lang.Object ref = reservationID_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      reservationID_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -224,6 +265,9 @@ private static final long serialVersionUID = 0L;
     if (!getTimeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, time_);
     }
+    if (!getReservationIDBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, reservationID_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -241,6 +285,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!getTimeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, time_);
+    }
+    if (!getReservationIDBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, reservationID_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -264,6 +311,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getDate());
     result = result && getTime()
         .equals(other.getTime());
+    result = result && getReservationID()
+        .equals(other.getReservationID());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -281,6 +330,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getDate().hashCode();
     hash = (37 * hash) + TIME_FIELD_NUMBER;
     hash = (53 * hash) + getTime().hashCode();
+    hash = (37 * hash) + RESERVATIONID_FIELD_NUMBER;
+    hash = (53 * hash) + getReservationID().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -424,6 +475,8 @@ private static final long serialVersionUID = 0L;
 
       time_ = "";
 
+      reservationID_ = "";
+
       return this;
     }
 
@@ -453,6 +506,7 @@ private static final long serialVersionUID = 0L;
       result.userID_ = userID_;
       result.date_ = date_;
       result.time_ = time_;
+      result.reservationID_ = reservationID_;
       onBuilt();
       return result;
     }
@@ -511,6 +565,10 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getTime().isEmpty()) {
         time_ = other.time_;
+        onChanged();
+      }
+      if (!other.getReservationID().isEmpty()) {
+        reservationID_ = other.reservationID_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -745,6 +803,75 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       time_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object reservationID_ = "";
+    /**
+     * <code>string reservationID = 4;</code>
+     */
+    public java.lang.String getReservationID() {
+      java.lang.Object ref = reservationID_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        reservationID_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string reservationID = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getReservationIDBytes() {
+      java.lang.Object ref = reservationID_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        reservationID_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string reservationID = 4;</code>
+     */
+    public Builder setReservationID(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      reservationID_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string reservationID = 4;</code>
+     */
+    public Builder clearReservationID() {
+      
+      reservationID_ = getDefaultInstance().getReservationID();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string reservationID = 4;</code>
+     */
+    public Builder setReservationIDBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      reservationID_ = value;
       onChanged();
       return this;
     }

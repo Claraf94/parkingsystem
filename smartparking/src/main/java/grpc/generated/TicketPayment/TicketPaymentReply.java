@@ -8,18 +8,18 @@ package grpc.generated.TicketPayment;
  *Reply message for making payment
  * </pre>
  *
- * Protobuf type {@code smartparking.ClientReply}
+ * Protobuf type {@code smartparking.TicketPaymentReply}
  */
-public  final class ClientReply extends
+public  final class TicketPaymentReply extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:smartparking.ClientReply)
-    ClientReplyOrBuilder {
+    // @@protoc_insertion_point(message_implements:smartparking.TicketPaymentReply)
+    TicketPaymentReplyOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ClientReply.newBuilder() to construct.
-  private ClientReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use TicketPaymentReply.newBuilder() to construct.
+  private TicketPaymentReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ClientReply() {
+  private TicketPaymentReply() {
     confirmation_ = false;
     receiptID_ = "";
   }
@@ -29,7 +29,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private ClientReply(
+  private TicketPaymentReply(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -80,15 +80,15 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_ClientReply_descriptor;
+    return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_TicketPaymentReply_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_ClientReply_fieldAccessorTable
+    return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_TicketPaymentReply_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            grpc.generated.TicketPayment.ClientReply.class, grpc.generated.TicketPayment.ClientReply.Builder.class);
+            grpc.generated.TicketPayment.TicketPaymentReply.class, grpc.generated.TicketPayment.TicketPaymentReply.Builder.class);
   }
 
   public static final int CONFIRMATION_FIELD_NUMBER = 2;
@@ -184,10 +184,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof grpc.generated.TicketPayment.ClientReply)) {
+    if (!(obj instanceof grpc.generated.TicketPayment.TicketPaymentReply)) {
       return super.equals(obj);
     }
-    grpc.generated.TicketPayment.ClientReply other = (grpc.generated.TicketPayment.ClientReply) obj;
+    grpc.generated.TicketPayment.TicketPaymentReply other = (grpc.generated.TicketPayment.TicketPaymentReply) obj;
 
     boolean result = true;
     result = result && (getConfirmation()
@@ -215,69 +215,69 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(byte[] data)
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(java.io.InputStream input)
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseDelimitedFrom(java.io.InputStream input)
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseDelimitedFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static grpc.generated.TicketPayment.ClientReply parseFrom(
+  public static grpc.generated.TicketPayment.TicketPaymentReply parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -290,7 +290,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(grpc.generated.TicketPayment.ClientReply prototype) {
+  public static Builder newBuilder(grpc.generated.TicketPayment.TicketPaymentReply prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -310,26 +310,26 @@ private static final long serialVersionUID = 0L;
    *Reply message for making payment
    * </pre>
    *
-   * Protobuf type {@code smartparking.ClientReply}
+   * Protobuf type {@code smartparking.TicketPaymentReply}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:smartparking.ClientReply)
-      grpc.generated.TicketPayment.ClientReplyOrBuilder {
+      // @@protoc_insertion_point(builder_implements:smartparking.TicketPaymentReply)
+      grpc.generated.TicketPayment.TicketPaymentReplyOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_ClientReply_descriptor;
+      return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_TicketPaymentReply_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_ClientReply_fieldAccessorTable
+      return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_TicketPaymentReply_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              grpc.generated.TicketPayment.ClientReply.class, grpc.generated.TicketPayment.ClientReply.Builder.class);
+              grpc.generated.TicketPayment.TicketPaymentReply.class, grpc.generated.TicketPayment.TicketPaymentReply.Builder.class);
     }
 
-    // Construct using grpc.generated.TicketPayment.ClientReply.newBuilder()
+    // Construct using grpc.generated.TicketPayment.TicketPaymentReply.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -357,17 +357,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_ClientReply_descriptor;
+      return grpc.generated.TicketPayment.TicketPaymentImpl.internal_static_smartparking_TicketPaymentReply_descriptor;
     }
 
     @java.lang.Override
-    public grpc.generated.TicketPayment.ClientReply getDefaultInstanceForType() {
-      return grpc.generated.TicketPayment.ClientReply.getDefaultInstance();
+    public grpc.generated.TicketPayment.TicketPaymentReply getDefaultInstanceForType() {
+      return grpc.generated.TicketPayment.TicketPaymentReply.getDefaultInstance();
     }
 
     @java.lang.Override
-    public grpc.generated.TicketPayment.ClientReply build() {
-      grpc.generated.TicketPayment.ClientReply result = buildPartial();
+    public grpc.generated.TicketPayment.TicketPaymentReply build() {
+      grpc.generated.TicketPayment.TicketPaymentReply result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -375,8 +375,8 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public grpc.generated.TicketPayment.ClientReply buildPartial() {
-      grpc.generated.TicketPayment.ClientReply result = new grpc.generated.TicketPayment.ClientReply(this);
+    public grpc.generated.TicketPayment.TicketPaymentReply buildPartial() {
+      grpc.generated.TicketPayment.TicketPaymentReply result = new grpc.generated.TicketPayment.TicketPaymentReply(this);
       result.confirmation_ = confirmation_;
       result.receiptID_ = receiptID_;
       onBuilt();
@@ -417,16 +417,16 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof grpc.generated.TicketPayment.ClientReply) {
-        return mergeFrom((grpc.generated.TicketPayment.ClientReply)other);
+      if (other instanceof grpc.generated.TicketPayment.TicketPaymentReply) {
+        return mergeFrom((grpc.generated.TicketPayment.TicketPaymentReply)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(grpc.generated.TicketPayment.ClientReply other) {
-      if (other == grpc.generated.TicketPayment.ClientReply.getDefaultInstance()) return this;
+    public Builder mergeFrom(grpc.generated.TicketPayment.TicketPaymentReply other) {
+      if (other == grpc.generated.TicketPayment.TicketPaymentReply.getDefaultInstance()) return this;
       if (other.getConfirmation() != false) {
         setConfirmation(other.getConfirmation());
       }
@@ -449,11 +449,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      grpc.generated.TicketPayment.ClientReply parsedMessage = null;
+      grpc.generated.TicketPayment.TicketPaymentReply parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (grpc.generated.TicketPayment.ClientReply) e.getUnfinishedMessage();
+        parsedMessage = (grpc.generated.TicketPayment.TicketPaymentReply) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -582,41 +582,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:smartparking.ClientReply)
+    // @@protoc_insertion_point(builder_scope:smartparking.TicketPaymentReply)
   }
 
-  // @@protoc_insertion_point(class_scope:smartparking.ClientReply)
-  private static final grpc.generated.TicketPayment.ClientReply DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:smartparking.TicketPaymentReply)
+  private static final grpc.generated.TicketPayment.TicketPaymentReply DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new grpc.generated.TicketPayment.ClientReply();
+    DEFAULT_INSTANCE = new grpc.generated.TicketPayment.TicketPaymentReply();
   }
 
-  public static grpc.generated.TicketPayment.ClientReply getDefaultInstance() {
+  public static grpc.generated.TicketPayment.TicketPaymentReply getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ClientReply>
-      PARSER = new com.google.protobuf.AbstractParser<ClientReply>() {
+  private static final com.google.protobuf.Parser<TicketPaymentReply>
+      PARSER = new com.google.protobuf.AbstractParser<TicketPaymentReply>() {
     @java.lang.Override
-    public ClientReply parsePartialFrom(
+    public TicketPaymentReply parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new ClientReply(input, extensionRegistry);
+      return new TicketPaymentReply(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<ClientReply> parser() {
+  public static com.google.protobuf.Parser<TicketPaymentReply> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ClientReply> getParserForType() {
+  public com.google.protobuf.Parser<TicketPaymentReply> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public grpc.generated.TicketPayment.ClientReply getDefaultInstanceForType() {
+  public grpc.generated.TicketPayment.TicketPaymentReply getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

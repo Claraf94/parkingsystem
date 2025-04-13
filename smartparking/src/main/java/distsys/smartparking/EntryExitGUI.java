@@ -130,7 +130,7 @@ public class EntryExitGUI extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(vehicleEntry)
                     .addComponent(vehicleExit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
@@ -153,14 +153,11 @@ public class EntryExitGUI extends javax.swing.JFrame {
             try{
             ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Entry");
             output.setText("Entry details:\n" + response.getMessage());
-            output.setForeground(Color.black);
             }catch(Exception e){
                 output.setText(e.getMessage());
-                output.setForeground(Color.red);
             }
         }else{
             output.setText("Please, enter the vehicle registration number.");
-            output.setForeground(Color.red);
         }
     }//GEN-LAST:event_vehicleEntryActionPerformed
 
@@ -170,14 +167,11 @@ public class EntryExitGUI extends javax.swing.JFrame {
             try{
             ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Exit");
             output.setText("Exit details:\n" + response.getMessage()+ "\nPayment confirmed: " + response.getConfirmation());
-            output.setForeground(Color.black);
             }catch(Exception e){
                 output.setText(e.getMessage());
-                output.setForeground(Color.red);
             }
         }else{
             output.setText("Please, enter the vehicle registration number.");
-            output.setForeground(Color.red);
         }
     }//GEN-LAST:event_vehicleExitActionPerformed
 
