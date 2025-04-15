@@ -4,9 +4,7 @@
  */
 package distsys.smartparking;
 
-import grpc.generated.Reservation.ReservationReply;
-import grpc.generated.Reservation.ReservationRequest;
-import grpc.generated.Reservation.ReservationServiceGrpc;
+import grpc.generated.TrackingSpacesAndReservation.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -22,10 +20,10 @@ import java.util.logging.Logger;
 public class ReservationGUI extends javax.swing.JFrame {
 
     private static final Logger logger = Logger.getLogger(ReservationGUI.class.getName());
-    StreamObserver<ReservationRequest> requestObserver;
+    private StreamObserver<ReservationRequest> requestObserver;
     // Non-blocking stub to make asynchronous calls
-    ReservationServiceGrpc.ReservationServiceStub asyncStub;
-    ManagedChannel channel;
+    private TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub asyncStub;
+    private ManagedChannel channel;
     //creating an arrayList to store the reservations 
     List<Reservation> reservations = new ArrayList<Reservation>();
     //creating a temporary arrayList to store the reservations before they have been completed
@@ -43,7 +41,7 @@ public class ReservationGUI extends javax.swing.JFrame {
                 forAddress(host, port)
                 .usePlaintext()
                 .build();
-        asyncStub = ReservationServiceGrpc.newStub(channel);
+        asyncStub = TrackingSpacesAndReservationServiceGrpc.newStub(channel);
     }
 
     /**
@@ -225,24 +223,12 @@ public class ReservationGUI extends javax.swing.JFrame {
 
     private void timeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeActionPerformed
         String setTime = time.getText();
-
-        //verifying the format
-        if (setTime.matches("([01][0-9]|2[0-3]):([0-5][0-9])")) {
-            outputDetails.setText("Selected Time: " + setTime);
-        } else {
-            outputDetails.setText("Format not supported.");
-        }
+        outputDetails.setText("Selected Time: " + setTime);
     }//GEN-LAST:event_timeActionPerformed
 
     private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
         String setDate = date.getText();
-
-        //verifying the format
-        if (setDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/202[5]$")) {
-            outputDetails.setText("Selected Date: " + setDate);
-        } else {
-            outputDetails.setText("Format not supported.");
-        }
+        outputDetails.setText("Selected Date: " + setDate);
     }//GEN-LAST:event_dateActionPerformed
 
     private void operationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationActionPerformed
@@ -251,33 +237,29 @@ public class ReservationGUI extends javax.swing.JFrame {
         String reservationTime = time.getText();
         
         //making sure all the fields were inserted
-        if (userID.isEmpty() || reservationDate.isEmpty() || reservationTime.isEmpty()) {
-        outputDetails.setText("Please fill in all the fields.");
-        return;
+        if (userID.isEmpty() || reservationDate.trim().equals("  /  /    ") || reservationTime.trim().equals("  :  ")) {
+            outputDetails.setText("Please fill in all the fields.");
+            return;
         }
-        
-        //making sure the fields date and time are compatible
-        if (reservationTime.matches("([01][0-9]|2[0-3]):([0-5][0-9])")
-                && reservationDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/202[5]$")) {
-            //instantiating the reservation
-            Reservation newReservation = new Reservation(userID, reservationDate, reservationTime);
-            //adding to the temporary list
-            pending.add(newReservation);
+        //instantiating the reservation
+        Reservation newReservation = new Reservation(userID, reservationDate, reservationTime);
+        //adding to the temporary list
+        pending.add(newReservation);
 
-            outputDetails.setText("Reservation added." + newReservation.toString()+
-                    "\nIf you want to add a new one, click Add or click Enter to end the process.");
-            
-            //cleaning the fields
-            date.setText("");
-            time.setText("");
-        } else {
-            outputDetails.setText("Please check if the time is in the format HH:mm and the date is in the format dd/MM/2025.");
-        }
+        outputDetails.setText("Reservation added." + newReservation.toString()
+                + "\nIf you want to add a new one, click Add or click Enter to end the process.");
+
+        //cleaning the fields
+        
+        date.setText("");
+        time.setText("");
     }//GEN-LAST:event_operationActionPerformed
 
     private void getIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getIDActionPerformed
-        String userID = UUID.randomUUID().toString();
-        userIDValue.setText(userID);
+        if(userIDValue.getText().isEmpty()){
+            String userID = UUID.randomUUID().toString();
+            userIDValue.setText(userID);
+        }
     }//GEN-LAST:event_getIDActionPerformed
 
     private void userIDValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDValueActionPerformed
@@ -287,8 +269,8 @@ public class ReservationGUI extends javax.swing.JFrame {
 
     private void requestReservationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestReservationActionPerformed
         if (pending.isEmpty()) {
-        outputDetails.setText("No reservations to submit.");
-        return;
+            outputDetails.setText("No reservations to submit.");
+            return;
         }
         
         //cleaning the content of the ouput box every time a reservation is added
@@ -336,8 +318,7 @@ public class ReservationGUI extends javax.swing.JFrame {
 
         } catch (Exception e) {
             logger.info("Error while trying the request: " + e.getMessage());
-        }
-        
+        }     
     }//GEN-LAST:event_requestReservationActionPerformed
     /**
      * @param args the command line arguments

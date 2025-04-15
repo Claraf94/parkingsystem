@@ -7,10 +7,7 @@ package distsys.smartparking;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import grpc.generated.VehicleEntryExit.ClientRequest;
-import grpc.generated.VehicleEntryExit.ClientReply;
-import grpc.generated.VehicleEntryExit.VehicleEntryExitServiceGrpc;
+import grpc.generated.VehicleEntryExit.*;
 import grpc.generated.VehicleEntryExit.VehicleEntryExitServiceGrpc.VehicleEntryExitServiceBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -26,8 +23,8 @@ import java.util.logging.Level;
  */
 public class EntryExitGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(EntryExitGUI.class.getName());
-    VehicleEntryExitServiceBlockingStub blockingStub;
-    ManagedChannel channel;
+    private VehicleEntryExitServiceBlockingStub blockingStub;
+    private ManagedChannel channel;
     
     /**
      * Creates new form EntryExitGUI
@@ -148,35 +145,26 @@ public class EntryExitGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_numberPlateActionPerformed
 
     private void vehicleEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleEntryActionPerformed
-        vehicleRegistration = this.numberPlate.getText().trim();
-        if(!vehicleRegistration.isEmpty()){    
+        vehicleRegistration = this.numberPlate.getText().trim().toUpperCase();
             try{
-            ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Entry");
-            output.setText("Entry details:\n" + response.getMessage());
+                ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Entry");
+                output.setText("Entry details:\n" + response.getMessage());
             }catch(Exception e){
                 output.setText(e.getMessage());
             }
-        }else{
-            output.setText("Please, enter the vehicle registration number.");
-        }
     }//GEN-LAST:event_vehicleEntryActionPerformed
 
     private void vehicleExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleExitActionPerformed
         vehicleRegistration = this.numberPlate.getText().trim();
-        if(!vehicleRegistration.isEmpty()){    
             try{
             ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Exit");
             output.setText("Exit details:\n" + response.getMessage()+ "\nPayment confirmed: " + response.getConfirmation());
             }catch(Exception e){
                 output.setText(e.getMessage());
             }
-        }else{
-            output.setText("Please, enter the vehicle registration number.");
-        }
     }//GEN-LAST:event_vehicleExitActionPerformed
-
-     
-      public ClientReply clientHelperVehicleEntryExit(String numberPlate, String operation) {
+    
+    public ClientReply clientHelperVehicleEntryExit(String numberPlate, String operation) {
         ClientRequest request = ClientRequest.newBuilder()
                 .setNumberPlate(numberPlate)
                 .setOperation(operation)

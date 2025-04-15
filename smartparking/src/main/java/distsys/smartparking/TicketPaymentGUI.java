@@ -4,12 +4,10 @@
  */
 package distsys.smartparking;
 
-import grpc.generated.TicketPayment.TicketPaymentServiceGrpc;
+import grpc.generated.TicketPayment.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import java.util.logging.Logger;
-import grpc.generated.TicketPayment.TicketPaymentRequest;
-import grpc.generated.TicketPayment.TicketPaymentReply;
 import io.grpc.stub.StreamObserver;
 import java.util.UUID;
 import java.util.ArrayList;
@@ -22,9 +20,9 @@ import java.util.List;
 public class TicketPaymentGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(TicketPaymentGUI.class.getName());
     // a non-blocking stub to make an asynchronous call
-    private static TicketPaymentServiceGrpc.TicketPaymentServiceStub asyncStub;
-    ManagedChannel channel;
-    StreamObserver<TicketPaymentRequest> requestObserver;
+    private TicketPaymentServiceGrpc.TicketPaymentServiceStub asyncStub;
+    private ManagedChannel channel;
+    private StreamObserver<TicketPaymentRequest> requestObserver;
     //creating an arrayList to process multiple payments
     ArrayList<TicketPaymentRequest> pendingPayment = new ArrayList<TicketPaymentRequest>();
     double remaining = 0;
@@ -44,7 +42,7 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
                 remainingAmount.setText("" + remaining);
                 
         //gRPC channel settings
-        ManagedChannel channel = ManagedChannelBuilder
+        channel = ManagedChannelBuilder
 				.forAddress("localhost", 50051)
 				.usePlaintext()
 				.build();
