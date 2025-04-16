@@ -24,9 +24,7 @@ public class ReservationGUI extends javax.swing.JFrame {
     // Non-blocking stub to make asynchronous calls
     private TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub asyncStub;
     private ManagedChannel channel;
-    //creating an arrayList to store the reservations 
-    List<Reservation> reservations = new ArrayList<Reservation>();
-    //creating a temporary arrayList to store the reservations before they have been completed
+    //creating a temporary list to store the reservations before they have been completed
     List<Reservation> pending = new ArrayList<Reservation>();
 
     /**
@@ -66,7 +64,8 @@ public class ReservationGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         outputDetails = new javax.swing.JTextArea();
         requestReservation = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,15 +134,18 @@ public class ReservationGUI extends javax.swing.JFrame {
         outputDetails.setWrapStyleWord(true);
         jScrollPane1.setViewportView(outputDetails);
 
-        requestReservation.setText("Enter");
+        requestReservation.setText("End");
         requestReservation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 requestReservationActionPerformed(evt);
             }
         });
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Click \"Add\" to send a new reservation or \"Enter\" to submit all");
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("To finalize the process, click on the button bellow");
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("To make your reservation, click on the button bellow");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -170,22 +172,25 @@ public class ReservationGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 136, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(217, 217, 217)
-                        .addComponent(getID)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(157, 157, 157)
-                                .addComponent(operation)
-                                .addGap(30, 30, 30)
-                                .addComponent(requestReservation)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(labelDetails, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(217, 217, 217)
+                                .addComponent(getID))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(214, 214, 214)
+                                .addComponent(requestReservation))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(220, 220, 220)
+                                .addComponent(operation)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -205,16 +210,18 @@ public class ReservationGUI extends javax.swing.JFrame {
                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(operation)
-                    .addComponent(requestReservation))
+                .addComponent(operation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(labelDetails)
+                .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                .addComponent(requestReservation)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelDetails)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -236,23 +243,27 @@ public class ReservationGUI extends javax.swing.JFrame {
         String reservationDate = date.getText();
         String reservationTime = time.getText();
         
-        //making sure all the fields were inserted
-        if (userID.isEmpty() || reservationDate.trim().equals("  /  /    ") || reservationTime.trim().equals("  :  ")) {
-            outputDetails.setText("Please fill in all the fields.");
-            return;
+        //making sure all the fields were inserted and correct data format
+        if (!userID.isEmpty() && !reservationDate.trim().equals("  /  /    ") && !reservationTime.trim().equals("  :  ")) {
+            if (reservationTime.matches("([01][0-9]|2[0-3]):([0-5][0-9])")
+            && reservationDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/202[5]$")) {
+                //instantiating the reservation when all the fields were completed
+                Reservation newReservation = new Reservation(userID, reservationDate, reservationTime);
+                //adding to the temporary list
+                pending.add(newReservation);
+                
+                outputDetails.setText("Reservation temporarily added.\n" + newReservation.toString()
+                + "\nYou can add a new one or click 'End' to end the process.");
+                
+                //cleaning the fields
+                date.setText("");
+                time.setText("");
+            }else{
+                outputDetails.setText("Please, check if date is in the format dd/MM/2025 and time HH:mm.");
+            }
+        }else{
+                outputDetails.setText("Please, fill in all the fields.");
         }
-        //instantiating the reservation
-        Reservation newReservation = new Reservation(userID, reservationDate, reservationTime);
-        //adding to the temporary list
-        pending.add(newReservation);
-
-        outputDetails.setText("Reservation added." + newReservation.toString()
-                + "\nIf you want to add a new one, click Add or click Enter to end the process.");
-
-        //cleaning the fields
-        
-        date.setText("");
-        time.setText("");
     }//GEN-LAST:event_operationActionPerformed
 
     private void getIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getIDActionPerformed
@@ -303,15 +314,30 @@ public class ReservationGUI extends javax.swing.JFrame {
         requestObserver = asyncStub.reservation(responseObserver);
 
         try {
-            for(Reservation res : pending){
-                ReservationRequest request = ReservationRequest.newBuilder()
+            for(Reservation res : pending){ 
+                String userID = res.getUserID();
+                String reservationDate = res.getDate();
+                String reservationTime = res.getTime();
+        
+                //making sure all the fields were inserted and correct data format
+                if (!userID.isEmpty() && !reservationDate.trim().equals("  /  /    ") && !reservationTime.trim().equals("  :  ")) {
+                    if (reservationTime.matches("([01][0-9]|2[0-3]):([0-5][0-9])")
+                    && reservationDate.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/202[5]$")) {
+                        ReservationRequest request = ReservationRequest.newBuilder()
                         .setUserID(res.getUserID())
                         .setDate(res.getDate())
                         .setTime(res.getTime())
                         .setReservationID(res.getReservationID())
                         .build();
 
-                requestObserver.onNext(request);
+                        requestObserver.onNext(request);
+                        
+                    }else{
+                        outputDetails.append("Reservation ID: " + res.getReservationID() + " with invalid date and tirme format.");
+                    }
+                }else{
+                    outputDetails.append("All field must have the proper data.");
+                }
             }
             
             requestObserver.onCompleted();
@@ -361,7 +387,8 @@ public class ReservationGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelDetails;
     private javax.swing.JButton operation;

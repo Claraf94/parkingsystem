@@ -159,8 +159,6 @@ public class SmartParkingServer {
         public StreamObserver<ReservationRequest> reservation(StreamObserver<ReservationReply> responseObserver) {
             return new StreamObserver<ReservationRequest>() {
                 boolean reserved = emptySpots > 0;
-                String message;
-                String reservationDetails = "";
                 
                 @Override
                 public void onNext(ReservationRequest request) {
@@ -168,35 +166,32 @@ public class SmartParkingServer {
                     String date = request.getDate();
                     String time = request.getTime();
                     String reservationID = request.getReservationID();
+                    String message;
+                    String reservationDetails = "";
 
-                    System.out.println("Reservation request received from the user: " + userID);
-                    //making sure all the fields were inserted
-                    if (userID.isEmpty() || date.trim().equals("  /  /    ") || time.trim().equals("  :  ")){
+                    //making sure all the fields were inserted - date and time need to be checked using the spaces
+                    //because of the formatted text field that were set for them
+                    if (!userID.isEmpty() && !date.trim().equals("  /  /    ") && !time.trim().equals("  :  ")){
                         //making sure the fields date and time are compatible
                         if(time.matches("([01][0-9]|2[0-3]):([0-5][0-9])")&& date.matches("^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/202[5]$")){
+                            System.out.println("Reservation request received from the user: " + userID);
                             if (reserved) {
-                            message = "Reservation successfully done for:";
-                            reservationDetails = "User ID: " + userID + "\n"
-                                    + "Date: " + date + "\n"
-                                    + "Time: " + time + "\n"
-                                    + "Reservation ID: " + reservationID;
-                            emptySpots--;
-                            reservations.add(userID);
+                                message = "Reservation successfully done for:";
+                                reservationDetails = "User ID: " + userID + "\n"
+                                        + "Date: " + date + "\n"
+                                        + "Time: " + time + "\n"
+                                        + "Reservation ID: " + reservationID;
+                                emptySpots--;
+                                reservations.add(userID);
                             } else {
                                 message = "No more available spots for reservation.";
-                                //reinitializing the variables
-                                reservationDetails = "";
                             }
                         }else{
                             message = "Please check if the time is in the format HH:mm and the date is in the format dd/MM/2025.";
-                            //reinitializing the variables
-                            reserved = false;
-                            reservationDetails ="";
                         }
                     }else{
                         message = "Please fill in all the fields.";
-                    }
-                        
+                    }        
 
                     ReservationReply reply = ReservationReply.newBuilder()
                             .setReserved(reserved)
