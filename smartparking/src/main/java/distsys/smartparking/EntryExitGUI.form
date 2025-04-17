@@ -74,6 +74,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="numberPlate">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Format: D01-A-12345"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numberPlateActionPerformed"/>
       </Events>

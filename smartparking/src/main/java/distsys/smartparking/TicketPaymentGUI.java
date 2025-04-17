@@ -5,25 +5,29 @@
 package distsys.smartparking;
 
 import grpc.generated.TicketPayment.*;
+import grpc.generated.TrackingSpacesAndReservation.TrackingSpacesAndReservationServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import java.util.logging.Logger;
 import io.grpc.stub.StreamObserver;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author dell
+ *This GUI represents also the TicketPayment Client class and it simulates payment of a parking ticket 
+ * the communication between client and server occurs through a non blocking stub (asynchronous call)
+ * 
  */
 public class TicketPaymentGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(TicketPaymentGUI.class.getName());
     // a non-blocking stub to make an asynchronous call
     private TicketPaymentServiceGrpc.TicketPaymentServiceStub asyncStub;
     private ManagedChannel channel;
+    //to send multiples payments
     private StreamObserver<TicketPaymentRequest> requestObserver;
-    private List<TicketPaymentRequest> pendingPayments = new ArrayList<>();
     private double remaining;
     private double totalToPay;
 
@@ -36,10 +40,23 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
         channel = ManagedChannelBuilder
                 .forAddress("localhost", 50051)
                 .usePlaintext()
+                .intercept(new SmartParkingClientInterceptor())
                 .build();
-        asyncStub = TicketPaymentServiceGrpc.newStub(channel);
+        //create an instance of the BearerToken from the generated JWT and 
+        //make a stub in the main method of our client to use it
+        String jwt = getJwt();
+        BearerToken token = new BearerToken(jwt);
+        asyncStub = TicketPaymentServiceGrpc.newStub(channel)
+                    .withCallCredentials(token);
     }
-
+    
+    private static String getJwt() {
+        return Jwts.builder()
+                .setSubject("TicketPaymentGUI") // client's identifier
+                .signWith(SignatureAlgorithm.HS256, Constants.JWT_SIGNING_KEY)
+                .compact();
+    }
+    /**
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -216,109 +233,114 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
         //when the GUI starts, a random amount to be paid will be generated 
     }//GEN-LAST:event_totalAmountActionPerformed
 
+    //invokes the process payment
     private void paymentValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentValueActionPerformed
         processPaymentActionPerformed(evt);
     }//GEN-LAST:event_paymentValueActionPerformed
-
+    
+    //send the payment request
     private void processPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processPaymentActionPerformed
         String payment;
         double paid;
         String ticketID = parkingID.getText().trim().toUpperCase();
 
-        try {
-            //taking the option payment
-            payment = paymentType.getSelectedItem().toString();
-            paid = Double.parseDouble(paymentValue.getText());
+        //try to convert the value and get the type of payment 
+        payment = paymentType.getSelectedItem().toString();
+        paid = Double.parseDouble(paymentValue.getText());
 
-            if (paid <= 0) {
-                paymentDetails.append("Value to be paid cannot be negative.");
-                return;
-            }
-            
-            if(!payment.equals("Cash") && paid > remaining){
-                paymentDetails.append("It is not possible to pay a bigger amount than the remaining by using " + payment + "\n");
-                return;
-            }
-            
-            if(requestObserver == null){
-                requestObserver = asyncStub.processPayment(new StreamObserver<TicketPaymentReply>() {
-                    @Override
-                    public void onNext(TicketPaymentReply reply) {
-                        if (reply.getConfirmation()) {
-                            paymentDetails.append("Payment confirmed!\nReceipt ID: " + reply.getReceiptID());
-                            //cleaning all the data
-                            parkingID.setText("");
-                            totalAmount.setText("");
-                            paymentValue.setText("");
-                            totalToPay = 0;
-                            remaining = 0;
-                            requestObserver = null;
-                            remainingAmount.setText("");
-                            
-                        } else {
-                            paymentDetails.append("Something went wrong with the payment. Please, try again.");
-                        }
-                    }
+        //checking if the value is equal or less than zero
+        if (paid <= 0) {
+            paymentDetails.append("Value to be paid cannot be negative or zero.");
+            return;
+        }
 
-                    @Override
-                    public void onError(Throwable t) {
-                        paymentDetails.append("Error while trying payment." + t.getMessage());
-                    }
+        //checking if the value inserted when trying to use card ou voucher
+        //is more than the amount, which cannot be
+        if (!payment.equals("Cash") && paid > remaining) {
+            paymentDetails.append("It is not possible to pay a bigger amount than the remaining by using " + payment + "\n");
+            return;
+        }
 
-                    @Override
-                    public void onCompleted() {
+        //when initializing the payment 
+        if (requestObserver == null) {
+            requestObserver = asyncStub.processPayment(new StreamObserver<TicketPaymentReply>() {
+                @Override
+                public void onNext(TicketPaymentReply reply) {
+                    if (reply.getConfirmation()) {
+                        paymentDetails.append("Payment confirmed!\nReceipt ID: " + reply.getReceiptID());
+                        //cleaning all the data after confirmation
+                        parkingID.setText("");
+                        totalAmount.setText("");
+                        paymentValue.setText("");
+                        totalToPay = 0;
+                        remaining = 0;
+                        requestObserver = null;
+                        remainingAmount.setText("");
+
+                    } else {
+                        paymentDetails.append("Something went wrong with the payment. Please, try again.");
                     }
-                });
-            }
-            
-            //when cash payment is more than the amount to be paid
-            //in case the amount inserted is more than the price to be charged,
-            //need to calculate the change 
-            if(payment.equals("Cash") && paid > remaining){
-                double change = paid - remaining;
-                change = Math.round(change * 100)/100.0;
-                
-                TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    paymentDetails.append("Error while trying payment." + t.getMessage());
+                    System.out.println("Error while trying payment." + t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    System.out.println("Client received onComplete()");
+                }
+            });
+        }
+
+        //when cash payment is more than the amount to be paid
+        //in case the amount inserted is more than the price to be charged,
+        //need to calculate the change 
+        if (payment.equals("Cash") && paid > remaining) {
+            double change = paid - remaining;
+            change = Math.round(change * 100) / 100.0;
+
+            TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
                     .setParkingID(ticketID)
                     .setPaymentType(payment)
                     .setAmount(remaining)
                     .setPaymentID(UUID.randomUUID().toString())
                     .build();
-                requestObserver.onNext(payTicket);
-                //shows the partial payment
-                paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
-                //shows change due
-                paymentDetails.append("Change: €" + change + "\n");
-                remaining = 0;
-            }else{
-                 //when paying by card or voucher
-                 TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
+            requestObserver.onNext(payTicket);
+            //shows the partial payment
+            paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
+            //shows change due
+            paymentDetails.append("Change: €" + change + "\n");
+            remaining = 0;
+        } else {
+            //when paying by card or voucher
+            TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
                     .setParkingID(ticketID)
                     .setPaymentType(payment)
                     .setAmount(paid)
                     .setPaymentID(UUID.randomUUID().toString())
                     .build();
-               requestObserver.onNext(payTicket);
-               remaining -= paid;
-               remaining = Math.round(remaining * 100.0)/100.0;
-               remainingAmount.setText(Double.toString(remaining));
-               paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
-            }
+            requestObserver.onNext(payTicket);
+            remaining -= paid;
+            remaining = Math.round(remaining * 100.0) / 100.0;
+            remainingAmount.setText(Double.toString(remaining));
+            paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
+        }
 
-               if (remaining == 0) {
-                    requestObserver.onCompleted();
-                    totalAmount.setText("");
-                    remainingAmount.setText("");
-                }
-        }catch(Exception e){
-            paymentDetails.append("Error: " + e.getMessage());
+        if (remaining == 0) {
+            requestObserver.onCompleted();
+            totalAmount.setText("");
+            remainingAmount.setText("");
         }
     }//GEN-LAST:event_processPaymentActionPerformed
 
     private void remainingAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remainingAmountActionPerformed
         //no need to develop any code since is a non editable field
     }//GEN-LAST:event_remainingAmountActionPerformed
-
+    
+    //send the value request for the parking ticket
     private void getValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getValueActionPerformed
         String ticketID = parkingID.getText().trim().toUpperCase();
         //making sure the output is empty
@@ -344,15 +366,17 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
                 @Override
                 public void onError(Throwable t) {
                     paymentDetails.setText("Error requesting total amount for the parking ticket." + t.getMessage() + "\n");
+                    System.out.println("Error requesting total amount for the parking ticket." + t.getMessage());
                 }
 
                 @Override
                 public void onCompleted() {
+                    System.out.println("Client received onComplete()");
                 }
             });
 
         } else {
-            paymentDetails.setText("Parking ID can only contains numbers and letters.\n");
+            paymentDetails.setText("Parking ID cannot be empty and can only contains numbers and letters.\n");
         }
     }//GEN-LAST:event_getValueActionPerformed
 

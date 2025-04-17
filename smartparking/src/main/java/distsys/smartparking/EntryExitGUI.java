@@ -4,6 +4,7 @@
  */
 package distsys.smartparking;
 
+import grpc.generated.TicketPayment.TicketPaymentServiceGrpc;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -15,33 +16,52 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.logging.Level;
 
 /**
- *
- * @author dell
+ * This GUI represents also the EntryExit Client class and it simulates vehicles
+ * entry and exit the communication between client and server occurs through a
+ * blocking stub (synchronous call)
  */
 public class EntryExitGUI extends javax.swing.JFrame {
+
     private static final Logger logger = Logger.getLogger(EntryExitGUI.class.getName());
+    //gRPC blocking stub for unary service
     private VehicleEntryExitServiceBlockingStub blockingStub;
     private ManagedChannel channel;
-    
+    //store the number plate
+    private String vehicleRegistration;
+
     /**
      * Creates new form EntryExitGUI
      */
     public EntryExitGUI() {
         initComponents();
-        
+
         //gRPC channel settings
         String host = "localhost";
         int port = 50051;
         channel = ManagedChannelBuilder.
                 forAddress(host, port)
                 .usePlaintext()
+                .intercept(new SmartParkingClientInterceptor())
                 .build();
-         blockingStub = VehicleEntryExitServiceGrpc.newBlockingStub(channel);
+        //create an instance of the BearerToken from the generated JWT and 
+        //make a stub in the main method of our client to use it
+        String jwt = getJwt();
+        BearerToken token = new BearerToken(jwt);
+        blockingStub = VehicleEntryExitServiceGrpc.newBlockingStub(channel)
+                .withCallCredentials(token);
     }
 
+    private static String getJwt() {
+        return Jwts.builder()
+                .setSubject("EntryExitGUI") // client's identifier
+                .signWith(SignatureAlgorithm.HS256, Constants.JWT_SIGNING_KEY)
+                .compact();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,6 +81,7 @@ public class EntryExitGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        numberPlate.setToolTipText("Format: D01-A-12345");
         numberPlate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numberPlateActionPerformed(evt);
@@ -137,33 +158,45 @@ public class EntryExitGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    String vehicleRegistration;
     
+    //gets the number plate information
     private void numberPlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberPlateActionPerformed
         vehicleRegistration = this.numberPlate.getText().trim();
         System.out.println("Vehicle registration plate: " + vehicleRegistration);       
     }//GEN-LAST:event_numberPlateActionPerformed
-
+    
+    //send the entry request to the server
     private void vehicleEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleEntryActionPerformed
         vehicleRegistration = this.numberPlate.getText().trim().toUpperCase();
-            try{
-                ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Entry");
-                output.setText("Entry details:\n" + response.getMessage());
-            }catch(Exception e){
-                output.setText(e.getMessage());
-            }
-    }//GEN-LAST:event_vehicleEntryActionPerformed
+        try {
+            ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Entry");
+            output.setText("Entry details:\n" + response.getMessage());
+        } catch (Exception e) {
+            output.setText(e.getMessage());
+        }
 
+        //reseting the input
+        numberPlate.setText("");
+    }//GEN-LAST:event_vehicleEntryActionPerformed
+    
+    //send the exit request to the server
     private void vehicleExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleExitActionPerformed
-        vehicleRegistration = this.numberPlate.getText().trim();
-            try{
+        vehicleRegistration = this.numberPlate.getText().trim().toUpperCase();
+        try {
             ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Exit");
-            output.setText("Exit details:\n" + response.getMessage()+ "\nPayment confirmed: " + response.getConfirmation());
-            }catch(Exception e){
-                output.setText(e.getMessage());
-            }
+            output.setText("Exit details:\n" + response.getMessage() + "\nPayment confirmed: " + response.getConfirmation());
+        } catch (Exception e) {
+            output.setText(e.getMessage());
+        }
+
+        //reseting the input
+        numberPlate.setText("");           
     }//GEN-LAST:event_vehicleExitActionPerformed
     
+    /*
+    *this method invokes the service 
+    *@param numberPlate, operation
+    */
     public ClientReply clientHelperVehicleEntryExit(String numberPlate, String operation) {
         ClientRequest request = ClientRequest.newBuilder()
                 .setNumberPlate(numberPlate)

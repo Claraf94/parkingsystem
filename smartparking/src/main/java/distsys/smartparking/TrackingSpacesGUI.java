@@ -10,6 +10,8 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -18,11 +20,14 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 /**
- *
- * @author dell
+ *This GUI represents also the TrackingSpaces client class and it simulates tracking
+ *the number of available parking spaces in real time
+ * communication between client and server occurs through a non blocking stub(asynchronous calls)
+ * 
  */
 public class TrackingSpacesGUI extends javax.swing.JFrame {
     private static final Logger logger = Logger.getLogger(TrackingSpacesGUI.class.getName());
+    //gRPC non blocking stub for server streaming service
     private TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub stub;
     private ManagedChannel channel;
     
@@ -38,9 +43,23 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
         channel = ManagedChannelBuilder.
                 forAddress(host, port)
                 .usePlaintext()
+                .intercept(new SmartParkingClientInterceptor())
                 .build();
-        stub = TrackingSpacesAndReservationServiceGrpc.newStub(channel);
+        //create an instance of the BearerToken from the generated JWT and 
+        //make a stub in the main method of our client to use it
+        String jwt = getJwt();
+        BearerToken token = new BearerToken(jwt);
+        stub = TrackingSpacesAndReservationServiceGrpc.newStub(channel)
+                .withCallCredentials(token);
     }
+    
+    private static String getJwt() {
+        return Jwts.builder()
+                .setSubject("TrackingSpacesGUI") // client's identifier
+                .signWith(SignatureAlgorithm.HS256, Constants.JWT_SIGNING_KEY)
+                .compact();
+    }
+    /**
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -105,51 +124,46 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+        
+    //send the request for parking spots tracking
     private void trackingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trackingActionPerformed
-        try {
-            // prepare to collect multiple responses from the server
-            ArrayList<Integer> emptySpotsCollection = new ArrayList<>();
-            //empty request to the server
-            Empty request = Empty.newBuilder().build();
+        // prepare to collect multiple responses from the server
+        ArrayList<Integer> emptySpotsCollection = new ArrayList<>();
+        //empty request to the server
+        Empty request = Empty.newBuilder().build();
+        // prepare to receive a stream of responses from the server
+        StreamObserver<SpotsAvailability> responseObserver = new StreamObserver<SpotsAvailability>() {
+            @Override
+            public void onNext(SpotsAvailability spotsAvailability) {
+                System.out.println("Requesting updates about available sposts:");
+                //updates the text area during the thread inside the GUI
+                SwingUtilities.invokeLater(() -> {
+                    jTextArea1.append("Spots available for parking: " + spotsAvailability.getEmptySpots() + "\n");
+                });
+                //stores all the values inside the arrayList
+                emptySpotsCollection.add(spotsAvailability.getEmptySpots());
+            }
 
-            // prepare to receive a stream of responses from the server
-            StreamObserver<SpotsAvailability> responseObserver = new StreamObserver<SpotsAvailability> () {
-                @Override
-                public void onNext(SpotsAvailability spotsAvailability) {
-                    System.out.println("Requesting updates about available sposts:");
-                        jTextArea1.append("Spots available for parking: " + spotsAvailability.getEmptySpots() + "\n");
-                    });
-                        emptySpotsCollection.add(spotsAvailability.getEmptySpots());
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        System.out.println("Error requesting spots: " + t.getLocalizedMessage());
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("Client received onComplete()");
-                        System.out.println( "Data sent: "  + emptySpotsCollection.toString());   
-                    try {
-                        //shutdown channel
-                        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(TrackingSpacesGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }  
+            @Override
+            public void onError(Throwable t) {
+                try {
+                    throw new Exception("Error requesting spots: " + t.getLocalizedMessage());
+                } catch (Exception ex) {
+                    logger.getLogger(TrackingSpacesGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            };
+            }
 
-            // send the request to the server on the nonblocking stub. Pass the StreamObserver to the server
-            stub.trackingSpots(request, responseObserver);
-
-            // print a line here to show the client continues on rather than waiting for the server response.
-            System.out.println(LocalTime.now() + "Parking spots being localized");           
-        } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-            return;
-        } 
+            @Override
+            public void onCompleted() {
+                System.out.println("Client received onComplete()");
+                System.out.println("Data sent: " + emptySpotsCollection.toString());
+            }
+        };
+    
+        // send the request to the server on the nonblocking stub. Pass the StreamObserver to the server
+        stub.trackingSpots(request, responseObserver);
+        // print a line here to show the client continues on rather than waiting for the server response.
+        System.out.println(LocalTime.now() + "Client has sent request");
     }//GEN-LAST:event_trackingActionPerformed
 
     /**

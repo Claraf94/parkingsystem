@@ -4,18 +4,22 @@
  */
 package distsys.smartparking;
 
+import grpc.generated.TicketPayment.TicketPaymentServiceGrpc;
 import grpc.generated.TrackingSpacesAndReservation.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- *
- * @author dell
+ *This GUI represents also the Reservation Client class and it simulates booking a parking spot 
+ * the communication between client and server occurs through a non blocking stub (asynchronous call)
+ * 
  */
 public class ReservationGUI extends javax.swing.JFrame {
 
@@ -38,9 +42,23 @@ public class ReservationGUI extends javax.swing.JFrame {
         channel = ManagedChannelBuilder.
                 forAddress(host, port)
                 .usePlaintext()
+                .intercept(new SmartParkingClientInterceptor())
                 .build();
-        asyncStub = TrackingSpacesAndReservationServiceGrpc.newStub(channel);
+        //create an instance of the BearerToken from the generated JWT and 
+        //make a stub in the main method of our client to use it
+        String jwt = getJwt();
+        BearerToken token = new BearerToken(jwt);
+        asyncStub = TrackingSpacesAndReservationServiceGrpc.newStub(channel)
+                    .withCallCredentials(token);
     }
+    
+    private static String getJwt() {
+        return Jwts.builder()
+                .setSubject("ReservationGUI") // client's identifier
+                .signWith(SignatureAlgorithm.HS256, Constants.JWT_SIGNING_KEY)
+                .compact();
+    }
+    /**
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -227,17 +245,20 @@ public class ReservationGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //gets the time input
     private void timeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeActionPerformed
         String setTime = time.getText();
         outputDetails.setText("Selected Time: " + setTime);
     }//GEN-LAST:event_timeActionPerformed
 
+    //gets the date input
     private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
         String setDate = date.getText();
         outputDetails.setText("Selected Date: " + setDate);
     }//GEN-LAST:event_dateActionPerformed
-
+    
+    //add a reservation to a temporary list before it is confirmed
     private void operationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operationActionPerformed
         String userID = userIDValue.getText();
         String reservationDate = date.getText();
@@ -265,19 +286,22 @@ public class ReservationGUI extends javax.swing.JFrame {
                 outputDetails.setText("Please, fill in all the fields.");
         }
     }//GEN-LAST:event_operationActionPerformed
-
+    
+    //gets the userID
     private void getIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getIDActionPerformed
         if(userIDValue.getText().isEmpty()){
             String userID = UUID.randomUUID().toString();
             userIDValue.setText(userID);
         }
     }//GEN-LAST:event_getIDActionPerformed
-
+    
+    //print out the userID
     private void userIDValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDValueActionPerformed
         String userID = this.userIDValue.getText();
         System.out.println(userID);
     }//GEN-LAST:event_userIDValueActionPerformed
-
+    
+    //send the reservation request when client decides to end the process and send all to the server
     private void requestReservationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestReservationActionPerformed
         if (pending.isEmpty()) {
             outputDetails.setText("No reservations to submit.");
