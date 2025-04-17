@@ -8,11 +8,21 @@ public interface TicketPaymentRequestOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>string parkingID = 1;</code>
+   */
+  java.lang.String getParkingID();
+  /**
+   * <code>string parkingID = 1;</code>
+   */
+  com.google.protobuf.ByteString
+      getParkingIDBytes();
+
+  /**
    * <pre>
    *Card, cash, voucher
    * </pre>
    *
-   * <code>string paymentType = 1;</code>
+   * <code>string paymentType = 2;</code>
    */
   java.lang.String getPaymentType();
   /**
@@ -20,22 +30,22 @@ public interface TicketPaymentRequestOrBuilder extends
    *Card, cash, voucher
    * </pre>
    *
-   * <code>string paymentType = 1;</code>
+   * <code>string paymentType = 2;</code>
    */
   com.google.protobuf.ByteString
       getPaymentTypeBytes();
 
   /**
-   * <code>double amount = 2;</code>
+   * <code>double amount = 3;</code>
    */
   double getAmount();
 
   /**
-   * <code>string paymentID = 3;</code>
+   * <code>string paymentID = 4;</code>
    */
   java.lang.String getPaymentID();
   /**
-   * <code>string paymentID = 3;</code>
+   * <code>string paymentID = 4;</code>
    */
   com.google.protobuf.ByteString
       getPaymentIDBytes();

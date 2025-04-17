@@ -17,7 +17,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
  * <pre>
- *This service will process the ticket payment - Client Streaming
+ *This service will process the ticket payment 
  * </pre>
  */
 @javax.annotation.Generated(
@@ -30,6 +30,38 @@ public final class TicketPaymentServiceGrpc {
   public static final String SERVICE_NAME = "smartparking.TicketPaymentService";
 
   // Static method descriptors that strictly reflect the proto.
+  private static volatile io.grpc.MethodDescriptor<grpc.generated.TicketPayment.AmountRequest,
+      grpc.generated.TicketPayment.AmountReply> getRandomAmountMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "randomAmount",
+      requestType = grpc.generated.TicketPayment.AmountRequest.class,
+      responseType = grpc.generated.TicketPayment.AmountReply.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<grpc.generated.TicketPayment.AmountRequest,
+      grpc.generated.TicketPayment.AmountReply> getRandomAmountMethod() {
+    io.grpc.MethodDescriptor<grpc.generated.TicketPayment.AmountRequest, grpc.generated.TicketPayment.AmountReply> getRandomAmountMethod;
+    if ((getRandomAmountMethod = TicketPaymentServiceGrpc.getRandomAmountMethod) == null) {
+      synchronized (TicketPaymentServiceGrpc.class) {
+        if ((getRandomAmountMethod = TicketPaymentServiceGrpc.getRandomAmountMethod) == null) {
+          TicketPaymentServiceGrpc.getRandomAmountMethod = getRandomAmountMethod = 
+              io.grpc.MethodDescriptor.<grpc.generated.TicketPayment.AmountRequest, grpc.generated.TicketPayment.AmountReply>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "smartparking.TicketPaymentService", "randomAmount"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  grpc.generated.TicketPayment.AmountRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  grpc.generated.TicketPayment.AmountReply.getDefaultInstance()))
+                  .setSchemaDescriptor(new TicketPaymentServiceMethodDescriptorSupplier("randomAmount"))
+                  .build();
+          }
+        }
+     }
+     return getRandomAmountMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<grpc.generated.TicketPayment.TicketPaymentRequest,
       grpc.generated.TicketPayment.TicketPaymentReply> getProcessPaymentMethod;
 
@@ -87,12 +119,25 @@ public final class TicketPaymentServiceGrpc {
 
   /**
    * <pre>
-   *This service will process the ticket payment - Client Streaming
+   *This service will process the ticket payment 
    * </pre>
    */
   public static abstract class TicketPaymentServiceImplBase implements io.grpc.BindableService {
 
     /**
+     * <pre>
+     *Unary - just to simulate and generate a random value to be paid
+     * </pre>
+     */
+    public void randomAmount(grpc.generated.TicketPayment.AmountRequest request,
+        io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.AmountReply> responseObserver) {
+      asyncUnimplementedUnaryCall(getRandomAmountMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
+     *Client streaming - can process multiple payments to achieve the total
+     * </pre>
      */
     public io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentRequest> processPayment(
         io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentReply> responseObserver) {
@@ -101,6 +146,13 @@ public final class TicketPaymentServiceGrpc {
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+          .addMethod(
+            getRandomAmountMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                grpc.generated.TicketPayment.AmountRequest,
+                grpc.generated.TicketPayment.AmountReply>(
+                  this, METHODID_RANDOM_AMOUNT)))
           .addMethod(
             getProcessPaymentMethod(),
             asyncClientStreamingCall(
@@ -114,7 +166,7 @@ public final class TicketPaymentServiceGrpc {
 
   /**
    * <pre>
-   *This service will process the ticket payment - Client Streaming
+   *This service will process the ticket payment 
    * </pre>
    */
   public static final class TicketPaymentServiceStub extends io.grpc.stub.AbstractStub<TicketPaymentServiceStub> {
@@ -134,6 +186,20 @@ public final class TicketPaymentServiceGrpc {
     }
 
     /**
+     * <pre>
+     *Unary - just to simulate and generate a random value to be paid
+     * </pre>
+     */
+    public void randomAmount(grpc.generated.TicketPayment.AmountRequest request,
+        io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.AmountReply> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getRandomAmountMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     *Client streaming - can process multiple payments to achieve the total
+     * </pre>
      */
     public io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentRequest> processPayment(
         io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.TicketPaymentReply> responseObserver) {
@@ -144,7 +210,7 @@ public final class TicketPaymentServiceGrpc {
 
   /**
    * <pre>
-   *This service will process the ticket payment - Client Streaming
+   *This service will process the ticket payment 
    * </pre>
    */
   public static final class TicketPaymentServiceBlockingStub extends io.grpc.stub.AbstractStub<TicketPaymentServiceBlockingStub> {
@@ -162,11 +228,21 @@ public final class TicketPaymentServiceGrpc {
         io.grpc.CallOptions callOptions) {
       return new TicketPaymentServiceBlockingStub(channel, callOptions);
     }
+
+    /**
+     * <pre>
+     *Unary - just to simulate and generate a random value to be paid
+     * </pre>
+     */
+    public grpc.generated.TicketPayment.AmountReply randomAmount(grpc.generated.TicketPayment.AmountRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getRandomAmountMethod(), getCallOptions(), request);
+    }
   }
 
   /**
    * <pre>
-   *This service will process the ticket payment - Client Streaming
+   *This service will process the ticket payment 
    * </pre>
    */
   public static final class TicketPaymentServiceFutureStub extends io.grpc.stub.AbstractStub<TicketPaymentServiceFutureStub> {
@@ -184,9 +260,21 @@ public final class TicketPaymentServiceGrpc {
         io.grpc.CallOptions callOptions) {
       return new TicketPaymentServiceFutureStub(channel, callOptions);
     }
+
+    /**
+     * <pre>
+     *Unary - just to simulate and generate a random value to be paid
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<grpc.generated.TicketPayment.AmountReply> randomAmount(
+        grpc.generated.TicketPayment.AmountRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getRandomAmountMethod(), getCallOptions()), request);
+    }
   }
 
-  private static final int METHODID_PROCESS_PAYMENT = 0;
+  private static final int METHODID_RANDOM_AMOUNT = 0;
+  private static final int METHODID_PROCESS_PAYMENT = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -205,6 +293,10 @@ public final class TicketPaymentServiceGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_RANDOM_AMOUNT:
+          serviceImpl.randomAmount((grpc.generated.TicketPayment.AmountRequest) request,
+              (io.grpc.stub.StreamObserver<grpc.generated.TicketPayment.AmountReply>) responseObserver);
+          break;
         default:
           throw new AssertionError();
       }
@@ -269,6 +361,7 @@ public final class TicketPaymentServiceGrpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new TicketPaymentServiceFileDescriptorSupplier())
+              .addMethod(getRandomAmountMethod())
               .addMethod(getProcessPaymentMethod())
               .build();
         }

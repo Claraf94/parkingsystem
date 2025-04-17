@@ -23,32 +23,22 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
     private TicketPaymentServiceGrpc.TicketPaymentServiceStub asyncStub;
     private ManagedChannel channel;
     private StreamObserver<TicketPaymentRequest> requestObserver;
-    //creating an arrayList to process multiple payments
-    ArrayList<TicketPaymentRequest> pendingPayment = new ArrayList<TicketPaymentRequest>();
-    double remaining = 0;
-    
+    private List<TicketPaymentRequest> pendingPayments = new ArrayList<>();
+    private double remaining;
+    private double totalToPay;
+
     /**
      * Creates new form TicketPaymentGUI
      */
     public TicketPaymentGUI() {
         initComponents();
-       //initializing the GUI interface with a random value to be paid 
-        double min = 10;
-                double max = 100;
-                double price = min + Math.random() * (max - min);
-                price = Math.round(price * 100.0) / 100.0;
-                totalAmount.setText("" + price);
-                remaining = price;
-                remainingAmount.setText("" + remaining);
-                
         //gRPC channel settings
         channel = ManagedChannelBuilder
-				.forAddress("localhost", 50051)
-				.usePlaintext()
-				.build();
-        asyncStub = TicketPaymentServiceGrpc.newStub(channel);		
+                .forAddress("localhost", 50051)
+                .usePlaintext()
+                .build();
+        asyncStub = TicketPaymentServiceGrpc.newStub(channel);
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,6 +62,9 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         remainingAmount = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        getValue = new javax.swing.JButton();
+        parkingID = new javax.swing.JTextField();
 
         jLabel5.setText("jLabel5");
 
@@ -126,62 +119,89 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setText("Insert the parking ticket ID:");
+
+        getValue.setText("Get Value");
+        getValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getValueActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(processPayment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(parkingID, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(processPayment, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(paymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(104, 104, 104)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(paymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(remainingAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(38, 38, 38)
+                                .addGap(36, 36, 36)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(paymentValue, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 24, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(6, 6, 6))
             .addGroup(layout.createSequentialGroup()
-                .addGap(115, 115, 115)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(remainingAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(142, 142, 142)
+                .addComponent(getValue)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(parkingID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(getValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(totalAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(paymentValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(paymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(paymentValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(processPayment)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(remainingAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(remainingAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -203,16 +223,52 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
     private void processPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processPaymentActionPerformed
         String payment;
         double paid;
-            
-        try{
+        String ticketID = parkingID.getText().trim().toUpperCase();
+
+        try {
             //taking the option payment
             payment = paymentType.getSelectedItem().toString();
             paid = Double.parseDouble(paymentValue.getText());
-            
-            //in case the payment value inserted is less than 0 or equal to 0
-            if(paid <= 0){
-                paymentDetails.setText("Value to be paid needs to be more than 0.");
+
+            if (paid <= 0) {
+                paymentDetails.append("Value to be paid cannot be negative.");
                 return;
+            }
+            
+            if(!payment.equals("Cash") && paid > remaining){
+                paymentDetails.append("It is not possible to pay a bigger amount than the remaining by using " + payment + "\n");
+                return;
+            }
+            
+            if(requestObserver == null){
+                requestObserver = asyncStub.processPayment(new StreamObserver<TicketPaymentReply>() {
+                    @Override
+                    public void onNext(TicketPaymentReply reply) {
+                        if (reply.getConfirmation()) {
+                            paymentDetails.append("Payment confirmed!\nReceipt ID: " + reply.getReceiptID());
+                            //cleaning all the data
+                            parkingID.setText("");
+                            totalAmount.setText("");
+                            paymentValue.setText("");
+                            totalToPay = 0;
+                            remaining = 0;
+                            requestObserver = null;
+                            remainingAmount.setText("");
+                            
+                        } else {
+                            paymentDetails.append("Something went wrong with the payment. Please, try again.");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        paymentDetails.append("Error while trying payment." + t.getMessage());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                    }
+                });
             }
             
             //when cash payment is more than the amount to be paid
@@ -220,58 +276,85 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
             //need to calculate the change 
             if(payment.equals("Cash") && paid > remaining){
                 double change = paid - remaining;
-                change = ((int)(change * 100)) /100.0;
+                change = Math.round(change * 100)/100.0;
                 
-                pendingPayment.add(TicketPaymentRequest.newBuilder()
-                .setPaymentType(payment)
-                .setAmount(remaining)
-                .setPaymentID(UUID.randomUUID().toString())
-                .build());
-                
+                TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
+                    .setParkingID(ticketID)
+                    .setPaymentType(payment)
+                    .setAmount(remaining)
+                    .setPaymentID(UUID.randomUUID().toString())
+                    .build();
+                requestObserver.onNext(payTicket);
                 //shows the partial payment
                 paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
                 //shows change due
                 paymentDetails.append("Change: €" + change + "\n");
-                paymentDetails.append("Payment done.");
-                
-                //reseting the variables
-                paymentValue.setText("");
-                totalAmount.setText("");
                 remaining = 0;
-                return;
+            }else{
+                 //when paying by card or voucher
+                 TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
+                    .setParkingID(ticketID)
+                    .setPaymentType(payment)
+                    .setAmount(paid)
+                    .setPaymentID(UUID.randomUUID().toString())
+                    .build();
+               requestObserver.onNext(payTicket);
+               remaining -= paid;
+               remaining = Math.round(remaining * 100.0)/100.0;
+               remainingAmount.setText(Double.toString(remaining));
+               paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
             }
-            
-            
-            //when paying by card or voucher
-             pendingPayment.add(TicketPaymentRequest.newBuilder()
-            .setPaymentType(payment)
-            .setAmount(paid)
-            .setPaymentID(UUID.randomUUID().toString())
-            .build());
 
-            remaining= remaining - paid;
-            remaining = ((int) (remaining * 100)) / 100.0;
-            remainingAmount.setText("" + remaining);
-            
-            //shows partial payment
-            paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
-
-            if (remaining == 0) {
-                paymentDetails.append("Payment done.");
-                totalAmount.setText("");
-            } 
-            
-            //reset the amount
-            paymentValue.setText("");
+               if (remaining == 0) {
+                    requestObserver.onCompleted();
+                    totalAmount.setText("");
+                    remainingAmount.setText("");
+                }
         }catch(Exception e){
-            paymentDetails.setText("Error: " + e.getMessage());
+            paymentDetails.append("Error: " + e.getMessage());
         }
-  
     }//GEN-LAST:event_processPaymentActionPerformed
 
     private void remainingAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remainingAmountActionPerformed
-        // TODO add your handling code here:
+        //no need to develop any code since is a non editable field
     }//GEN-LAST:event_remainingAmountActionPerformed
+
+    private void getValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getValueActionPerformed
+        String ticketID = parkingID.getText().trim().toUpperCase();
+        //making sure the output is empty
+        paymentDetails.setText("");
+
+        //verifying if the ID only contains letters/numbers
+        if (ticketID.matches("[A-Z0-9]+")) {
+            AmountRequest request = AmountRequest.newBuilder()
+                    .setParkingID(ticketID)
+                    .build();
+
+            asyncStub.randomAmount(request, new StreamObserver<AmountReply>() {
+                @Override
+                public void onNext(AmountReply reply) {
+                    totalToPay = reply.getAmount();
+                    remaining = totalToPay;
+                    totalAmount.setText(Double.toString(totalToPay));
+                    remainingAmount.setText(Double.toString(remaining));
+                    paymentDetails.append("Parking ticket: " + ticketID + ". Value to be paid: " + Double.toString(totalToPay) + "\n");
+
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    paymentDetails.setText("Error requesting total amount for the parking ticket." + t.getMessage() + "\n");
+                }
+
+                @Override
+                public void onCompleted() {
+                }
+            });
+
+        } else {
+            paymentDetails.setText("Parking ID can only contains numbers and letters.\n");
+        }
+    }//GEN-LAST:event_getValueActionPerformed
 
     /**
      * @param args the command line arguments
@@ -287,16 +370,24 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -309,13 +400,16 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton getValue;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField parkingID;
     private javax.swing.JTextArea paymentDetails;
     private javax.swing.JComboBox<String> paymentType;
     private javax.swing.JTextField paymentValue;

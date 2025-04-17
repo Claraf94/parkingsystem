@@ -118,7 +118,6 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
                 @Override
                 public void onNext(SpotsAvailability spotsAvailability) {
                     System.out.println("Requesting updates about available sposts:");
-                    SwingUtilities.invokeLater(() -> {
                         jTextArea1.append("Spots available for parking: " + spotsAvailability.getEmptySpots() + "\n");
                     });
                         emptySpotsCollection.add(spotsAvailability.getEmptySpots());

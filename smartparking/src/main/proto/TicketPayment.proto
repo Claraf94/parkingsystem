@@ -6,16 +6,32 @@ option java_outer_classname = "TicketPaymentImpl";
 //Package for all the services to be implemented
 package smartparking;
 
-//This service will process the ticket payment - Client Streaming
+//This service will process the ticket payment 
 service TicketPaymentService{
+    //Unary - just to simulate and generate a random value to be paid
+    rpc randomAmount(AmountRequest) returns (AmountReply){}
+
+    //Client streaming - can process multiple payments to achieve the total
     rpc ProcessPayment(stream TicketPaymentRequest) returns (TicketPaymentReply){}
+}
+
+//Request message for generating random amount
+ message AmountRequest{
+    string parkingID = 1;
+}
+
+//Reply message for generating random amount
+message AmountReply{
+    string parkingID = 1;
+    double amount = 2;   
 }
 
 //Request message for making payment
 message TicketPaymentRequest{
-    string paymentType = 1; //Card, cash, voucher
-    double amount = 2;
-    string paymentID = 3;
+    string parkingID = 1;
+    string paymentType = 2; //Card, cash, voucher
+    double amount = 3;
+    string paymentID = 4;   
 }
 
 //Reply message for making payment
@@ -23,5 +39,3 @@ message TicketPaymentReply{
     bool confirmation = 2; //Confirmation about the status of the payment
     string receiptID = 3; 
 }
-
-
