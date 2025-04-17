@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 /**
  *This GUI represents also the TicketPayment Client class and it simulates payment of a parking ticket 
@@ -287,7 +288,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
                 @Override
                 public void onError(Throwable t) {
                     paymentDetails.append("Error while trying payment." + t.getMessage());
-                    System.out.println("Error while trying payment." + t.getMessage());
+                    logger.log(Level.WARNING, "Server could not process the payment.", t);
                 }
 
                 @Override
@@ -317,7 +318,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
             paymentDetails.append("Change: €" + change + "\n");
             remaining = 0;
         } else {
-            //when paying by card or voucher
+            //when paying by card or voucher or cash was not enought to finish the payment
             TicketPaymentRequest payTicket = TicketPaymentRequest.newBuilder()
                     .setParkingID(ticketID)
                     .setPaymentType(payment)
@@ -325,6 +326,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
                     .setPaymentID(UUID.randomUUID().toString())
                     .build();
             requestObserver.onNext(payTicket);
+            //subtracting the value paid from the value to be paid
             remaining -= paid;
             remaining = Math.round(remaining * 100.0) / 100.0;
             remainingAmount.setText(Double.toString(remaining));
@@ -368,7 +370,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
                 @Override
                 public void onError(Throwable t) {
                     paymentDetails.setText("Error requesting total amount for the parking ticket." + t.getMessage() + "\n");
-                    System.out.println("Error requesting total amount for the parking ticket." + t.getMessage());
+                    logger.log(Level.WARNING, "Server could not generate the amount to be paid.", t);
                 }
 
                 @Override

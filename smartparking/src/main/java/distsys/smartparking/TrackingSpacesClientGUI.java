@@ -52,6 +52,7 @@ public class TrackingSpacesClientGUI extends javax.swing.JFrame {
         stub = TrackingSpacesAndReservationServiceGrpc.newStub(channel)
                 .withCallCredentials(token)
                 .withDeadlineAfter(5, TimeUnit.SECONDS);
+
     }
     
     private static String getJwt() {

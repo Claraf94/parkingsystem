@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class SmartParkingServer {
 
@@ -48,24 +49,21 @@ public class SmartParkingServer {
             System.out.println(" Server started, listening on " + port);
             //shutdown and cancelation
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                System.err.println("*** Shutting down gRPC server");
+                System.err.println("Shutting down gRPC server");
                 try {
                     server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
+                    logger.log(Level.WARNING, "Server could not shutdown properly.", e);
                     e.printStackTrace(System.err);
                 }
             }));
             server.awaitTermination();
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-
+            logger.log(Level.WARNING, "Server failed due to IO error.", e);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Server had an interruption while being executed.", e);
         }
-
     }
 
     /*
@@ -88,7 +86,7 @@ public class SmartParkingServer {
             boolean confirmation = false;
             //generating random confirmation(true or not) for the payment to confirm the exit
             boolean paidTicket = new Random().nextBoolean();
-            String message = "";
+            String message;
             String carPlate = request.getNumberPlate().toUpperCase();
             
             //validating the car plate input
@@ -132,7 +130,7 @@ public class SmartParkingServer {
         Random random = new Random();
         //always start with 10 available spots and goes until 100
         int emptySpots = new Random().nextInt(91) + 10;
-        List<String> reservations = new ArrayList<String>();
+        List<String> reservations = new ArrayList<>();
         
         //server streaming
         @Override
@@ -151,7 +149,7 @@ public class SmartParkingServer {
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.log(Level.WARNING, "Server had a problem while trying to executing.", e);
                 }
 
                 //updating randomly according to entry or exit of vehicles
@@ -229,7 +227,7 @@ public class SmartParkingServer {
 
                 @Override
                 public void onError(Throwable t) {
-                    System.out.println("Erro while trying to make the reservation: " + t.getMessage());
+                    System.out.println("Error while trying to make the reservation: " + t.getMessage());
                 }
 
                 @Override

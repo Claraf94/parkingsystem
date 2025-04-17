@@ -173,10 +173,13 @@ public class EntryExitClientGUI extends javax.swing.JFrame {
         try {
             ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Entry");
             output.setText("Entry details:\n" + response.getMessage());
-        } catch (Exception e) {
-            output.setText(e.getMessage());
+        }catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}",e.getStatus());
+            output.setText("Server failed to answer.");
+            return;
+        }catch(Exception e){
+            output.setText("Unknown error: " + e.getMessage());
         }
-
         //reseting the input
         numberPlate.setText("");
     }//GEN-LAST:event_vehicleEntryActionPerformed
@@ -187,10 +190,13 @@ public class EntryExitClientGUI extends javax.swing.JFrame {
         try {
             ClientReply response = clientHelperVehicleEntryExit(vehicleRegistration, "Exit");
             output.setText("Exit details:\n" + response.getMessage() + "\nPayment confirmed: " + response.getConfirmation());
-        } catch (Exception e) {
-            output.setText(e.getMessage());
+        }catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}",e.getStatus());
+            output.setText("Server failed to answer.");
+            return;
+        }catch(Exception e){
+            output.setText("Unknown error: " + e.getMessage());
         }
-
         //reseting the input
         numberPlate.setText("");           
     }//GEN-LAST:event_vehicleExitActionPerformed

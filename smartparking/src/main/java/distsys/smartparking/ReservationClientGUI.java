@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -340,6 +341,7 @@ public class ReservationClientGUI extends javax.swing.JFrame {
         requestObserver = asyncStub.reservation(responseObserver);
 
         try {
+            //iterating through the reservations that were stored in the pending list
             for(Reservation res : pending){ 
                 String userID = res.getUserID();
                 String reservationDate = res.getDate();
