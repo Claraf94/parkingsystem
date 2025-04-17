@@ -184,6 +184,8 @@ public class SmartParkingServer {
             
             return new StreamObserver<ReservationRequest>() {         
                 boolean reserved = emptySpots > 0;
+                String output = "Spots available for reservation.";
+                boolean waiting = false;
                 
                 @Override
                 public void onNext(ReservationRequest request) {
@@ -208,6 +210,7 @@ public class SmartParkingServer {
                                         + "Reservation ID: " + reservationID;
                                 emptySpots--;
                                 reservations.add(userID);
+                                waiting = true;
                             } else {
                                 message = "No more available spots for reservation.";
                             }

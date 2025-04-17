@@ -341,7 +341,7 @@ public class ReservationClientGUI extends javax.swing.JFrame {
                 logger.info("Reservations completed.");
                 //makes the pending list empty again
                 pending.clear();
-                userIDValue.setText("");
+                 userIDValue.setText("");
             }
         };
 
