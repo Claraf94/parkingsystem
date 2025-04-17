@@ -15,14 +15,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  *This GUI represents also the TicketPayment Client class and it simulates payment of a parking ticket 
  * the communication between client and server occurs through a non blocking stub (asynchronous call)
  * 
  */
-public class TicketPaymentGUI extends javax.swing.JFrame {
-    private static final Logger logger = Logger.getLogger(TicketPaymentGUI.class.getName());
+public class TicketPaymentClientGUI extends javax.swing.JFrame {
+    private static final Logger logger = Logger.getLogger(TicketPaymentClientGUI.class.getName());
     // a non-blocking stub to make an asynchronous call
     private TicketPaymentServiceGrpc.TicketPaymentServiceStub asyncStub;
     private ManagedChannel channel;
@@ -34,7 +35,7 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
     /**
      * Creates new form TicketPaymentGUI
      */
-    public TicketPaymentGUI() {
+    public TicketPaymentClientGUI() {
         initComponents();
         //gRPC channel settings
         channel = ManagedChannelBuilder
@@ -47,7 +48,8 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
         String jwt = getJwt();
         BearerToken token = new BearerToken(jwt);
         asyncStub = TicketPaymentServiceGrpc.newStub(channel)
-                    .withCallCredentials(token);
+                    .withCallCredentials(token)
+                    .withDeadlineAfter(5, TimeUnit.SECONDS);
     }
     
     private static String getJwt() {
@@ -398,27 +400,28 @@ public class TicketPaymentGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+            java.util.logging.Logger.getLogger(TicketPaymentClientGUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+            java.util.logging.Logger.getLogger(TicketPaymentClientGUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+            java.util.logging.Logger.getLogger(TicketPaymentClientGUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TicketPaymentGUI.class
+            java.util.logging.Logger.getLogger(TicketPaymentClientGUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TicketPaymentGUI().setVisible(true);
+                new TicketPaymentClientGUI().setVisible(true);
             }
         });
     }

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class SmartParkingServer {
 
@@ -34,7 +35,7 @@ public class SmartParkingServer {
         
         int port = 50051;
 
-        try {
+        try{
             Server server = ServerBuilder.forPort(port)
                     .addService(vehicleEntryExitService)
                     .addService(trackingSpacesAndReservationService)
@@ -45,6 +46,15 @@ public class SmartParkingServer {
                     .start();
             logger.info("Server started, listening on " + port);
             System.out.println(" Server started, listening on " + port);
+            //shutdown and cancelation
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.err.println("*** Shutting down gRPC server");
+                try {
+                    server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace(System.err);
+                }
+            }));
             server.awaitTermination();
 
         } catch (IOException e) {

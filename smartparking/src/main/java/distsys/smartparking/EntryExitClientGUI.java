@@ -18,6 +18,7 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -25,9 +26,9 @@ import java.util.logging.Level;
  * entry and exit the communication between client and server occurs through a
  * blocking stub (synchronous call)
  */
-public class EntryExitGUI extends javax.swing.JFrame {
+public class EntryExitClientGUI extends javax.swing.JFrame {
 
-    private static final Logger logger = Logger.getLogger(EntryExitGUI.class.getName());
+    private static final Logger logger = Logger.getLogger(EntryExitClientGUI.class.getName());
     //gRPC blocking stub for unary service
     private VehicleEntryExitServiceBlockingStub blockingStub;
     private ManagedChannel channel;
@@ -37,7 +38,7 @@ public class EntryExitGUI extends javax.swing.JFrame {
     /**
      * Creates new form EntryExitGUI
      */
-    public EntryExitGUI() {
+    public EntryExitClientGUI() {
         initComponents();
 
         //gRPC channel settings
@@ -53,7 +54,8 @@ public class EntryExitGUI extends javax.swing.JFrame {
         String jwt = getJwt();
         BearerToken token = new BearerToken(jwt);
         blockingStub = VehicleEntryExitServiceGrpc.newBlockingStub(channel)
-                .withCallCredentials(token);
+                .withCallCredentials(token)
+                .withDeadlineAfter(5, TimeUnit.SECONDS);
     }
 
     private static String getJwt() {
@@ -221,20 +223,21 @@ public class EntryExitGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EntryExitGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EntryExitClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EntryExitGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EntryExitClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EntryExitGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EntryExitClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EntryExitGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EntryExitClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EntryExitGUI().setVisible(true);
+                new EntryExitClientGUI().setVisible(true);
             }
         });
     }

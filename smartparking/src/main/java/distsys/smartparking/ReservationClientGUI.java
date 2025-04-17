@@ -14,6 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -21,9 +22,9 @@ import java.util.logging.Logger;
  * the communication between client and server occurs through a non blocking stub (asynchronous call)
  * 
  */
-public class ReservationGUI extends javax.swing.JFrame {
+public class ReservationClientGUI extends javax.swing.JFrame {
 
-    private static final Logger logger = Logger.getLogger(ReservationGUI.class.getName());
+    private static final Logger logger = Logger.getLogger(ReservationClientGUI.class.getName());
     private StreamObserver<ReservationRequest> requestObserver;
     // Non-blocking stub to make asynchronous calls
     private TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub asyncStub;
@@ -34,7 +35,7 @@ public class ReservationGUI extends javax.swing.JFrame {
     /**
      * Creates new form ReservationGUI
      */
-    public ReservationGUI() {
+    public ReservationClientGUI() {
         initComponents();
         //gRPC channel settings
         String host = "localhost";
@@ -49,7 +50,8 @@ public class ReservationGUI extends javax.swing.JFrame {
         String jwt = getJwt();
         BearerToken token = new BearerToken(jwt);
         asyncStub = TrackingSpacesAndReservationServiceGrpc.newStub(channel)
-                    .withCallCredentials(token);
+                    .withCallCredentials(token)
+                    .withDeadlineAfter(5, TimeUnit.SECONDS);
     }
     
     private static String getJwt() {
@@ -387,20 +389,21 @@ public class ReservationGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ReservationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservationClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ReservationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservationClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ReservationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservationClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ReservationGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReservationClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ReservationGUI().setVisible(true);
+                new ReservationClientGUI().setVisible(true);
             }
         });
     }

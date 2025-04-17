@@ -25,8 +25,8 @@ import javax.swing.SwingUtilities;
  * communication between client and server occurs through a non blocking stub(asynchronous calls)
  * 
  */
-public class TrackingSpacesGUI extends javax.swing.JFrame {
-    private static final Logger logger = Logger.getLogger(TrackingSpacesGUI.class.getName());
+public class TrackingSpacesClientGUI extends javax.swing.JFrame {
+    private static final Logger logger = Logger.getLogger(TrackingSpacesClientGUI.class.getName());
     //gRPC non blocking stub for server streaming service
     private TrackingSpacesAndReservationServiceGrpc.TrackingSpacesAndReservationServiceStub stub;
     private ManagedChannel channel;
@@ -34,7 +34,7 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
     /**
      * Creates new form TrackingSpacesGUI
      */
-    public TrackingSpacesGUI() {
+    public TrackingSpacesClientGUI() {
         initComponents();
         
         //gRPC channel settings
@@ -50,7 +50,8 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
         String jwt = getJwt();
         BearerToken token = new BearerToken(jwt);
         stub = TrackingSpacesAndReservationServiceGrpc.newStub(channel)
-                .withCallCredentials(token);
+                .withCallCredentials(token)
+                .withDeadlineAfter(5, TimeUnit.SECONDS);
     }
     
     private static String getJwt() {
@@ -149,7 +150,7 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
                 try {
                     throw new Exception("Error requesting spots: " + t.getLocalizedMessage());
                 } catch (Exception ex) {
-                    logger.getLogger(TrackingSpacesGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.getLogger(TrackingSpacesClientGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -183,20 +184,21 @@ public class TrackingSpacesGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TrackingSpacesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrackingSpacesClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TrackingSpacesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrackingSpacesClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TrackingSpacesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrackingSpacesClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TrackingSpacesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrackingSpacesClientGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TrackingSpacesGUI().setVisible(true);
+                new TrackingSpacesClientGUI().setVisible(true);
             }
         });
     }
