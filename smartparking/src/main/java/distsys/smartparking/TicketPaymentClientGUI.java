@@ -339,7 +339,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
                     .build();
             requestObserver.onNext(payTicket);
             //subtracting the value paid from the value to be paid
-            remaining -= paid;
+            remaining = remaining - paid;
             remaining = Math.round(remaining * 100.0) / 100.0;
             remainingAmount.setText(Double.toString(remaining));
             paymentDetails.append("Paid €" + paid + " by " + payment + "\n");
