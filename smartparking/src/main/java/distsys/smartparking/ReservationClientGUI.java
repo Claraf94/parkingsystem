@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * @author Clara
  *This GUI represents also the Reservation Client class and it simulates booking a parking spot 
  * the communication between client and server occurs through a non blocking stub (asynchronous call)
  * 
@@ -52,7 +53,7 @@ public class ReservationClientGUI extends javax.swing.JFrame {
         BearerToken token = new BearerToken(jwt);
         asyncStub = TrackingSpacesAndReservationServiceGrpc.newStub(channel)
                     .withCallCredentials(token)
-                    .withDeadlineAfter(1000, TimeUnit.SECONDS);
+                    .withDeadlineAfter(500, TimeUnit.SECONDS);
     }
     
     private static String getJwt() {

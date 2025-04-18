@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
 
 /**
  *
- * @author dell
+ *Class responsible to add the JWT token to gRPC calls
  */
 public class BearerToken implements CallCredentials {
 

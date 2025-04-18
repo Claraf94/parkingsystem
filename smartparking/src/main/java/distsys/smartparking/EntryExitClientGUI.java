@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
+ * @author Clara
  * This GUI represents also the EntryExit Client class and it simulates vehicles
  * entry and exit the communication between client and server occurs through a
  * blocking stub (synchronous call)
@@ -55,7 +56,7 @@ public class EntryExitClientGUI extends javax.swing.JFrame {
         BearerToken token = new BearerToken(jwt);
         blockingStub = VehicleEntryExitServiceGrpc.newBlockingStub(channel)
                 .withCallCredentials(token)
-                .withDeadlineAfter(1000, TimeUnit.SECONDS);
+                .withDeadlineAfter(500, TimeUnit.SECONDS);
     }
 
     private static String getJwt() {

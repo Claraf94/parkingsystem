@@ -6,6 +6,12 @@ package distsys.smartparking;
 
 import java.util.UUID;
 
+/*
+*
+*@author Clara
+*This class is used to represent the reservation on the system. It saves the reservation informations
+*/
+
 public class Reservation{
     //declaring variables
     private String userID;

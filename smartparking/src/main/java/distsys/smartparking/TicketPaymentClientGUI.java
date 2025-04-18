@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
+ * @author Clara
  *This GUI represents also the TicketPayment Client class and it simulates payment of a parking ticket 
  * the communication between client and server occurs through a non blocking stub (asynchronous call)
  * 
@@ -50,7 +51,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
         BearerToken token = new BearerToken(jwt);
         asyncStub = TicketPaymentServiceGrpc.newStub(channel)
                     .withCallCredentials(token)
-                    .withDeadlineAfter(1000, TimeUnit.SECONDS);
+                    .withDeadlineAfter(500, TimeUnit.SECONDS);
     }
     
     private static String getJwt() {
@@ -111,6 +112,7 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
 
         jLabel3.setText("Payment Value:");
 
+        paymentValue.setToolTipText("Format: 0.0");
         paymentValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 paymentValueActionPerformed(evt);
@@ -204,9 +206,9 @@ public class TicketPaymentClientGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(parkingID)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

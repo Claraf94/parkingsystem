@@ -25,6 +25,12 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+
+/**
+ *@Clara
+ * Class to run the server for all the services implemented
+ */
+
 public class SmartParkingServer {
 
     private static final Logger logger = Logger.getLogger(SmartParkingServer.class.getName());

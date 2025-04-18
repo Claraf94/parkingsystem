@@ -10,7 +10,11 @@ import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import java.util.logging.Logger;
 
-
+/*
+*This classes represents the interceptor on gRPC side
+*It intercept each and every data that it is requested to the server
+*
+*/
 public class SmartParkingServerMetadataInterceptor implements ServerInterceptor{
     private static final Logger logger = Logger.getLogger(SmartParkingServerMetadataInterceptor.class.getName());
     

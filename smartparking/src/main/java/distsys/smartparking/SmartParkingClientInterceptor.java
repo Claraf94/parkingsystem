@@ -14,6 +14,12 @@ import io.grpc.MethodDescriptor;
 import java.util.logging.Logger;
 import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
 
+/*
+*This class is an interceptor inside gRPC clients. It adds metadata to the requests that
+*the client classes make to the server
+*
+*/
+
 public class SmartParkingClientInterceptor implements ClientInterceptor {
 
     private static final Logger logger = Logger.getLogger(SmartParkingClientInterceptor.class.getName());
